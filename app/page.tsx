@@ -1,5 +1,6 @@
 'use client'
 import './globals.css'
+import '@solana/wallet-adapter-react-ui/styles.css'
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { ConnectionProvider, WalletProvider, useWallet } from '@solana/wallet-adapter-react'
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base'
@@ -160,7 +161,7 @@ function MiniStopwatch({seconds,total}:{seconds:number;total:number}){
           strokeDasharray={`${dash} ${circ}`} strokeLinecap="round" style={{transition:'stroke-dasharray 0.9s linear,stroke 0.3s'}}/>
       </svg>
       <div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',justifyContent:'center'}}>
-        <span style={{fontFamily:'"DM Mono",monospace',fontSize:8,fontWeight:700,color:danger?'#ef4444':'#00e5a0'}}>{String(seconds%60).padStart(2,'0')}</span>
+        <span style={{fontFamily:'DM Mono,monospace',fontSize:8,fontWeight:700,color:danger?'#ef4444':'#00e5a0'}}>{String(seconds%60).padStart(2,'0')}</span>
       </div>
     </div>
   )
@@ -272,7 +273,7 @@ function DeviceSkeleton({children,title}:{children:React.ReactNode;title:string}
       <div style={{background:'linear-gradient(90deg,#0a1628,#0d1f3a)',padding:'7px 10px',borderBottom:'1px solid #0d1f3a',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
         <div style={{display:'flex',alignItems:'center',gap:6}}>
           <div style={{width:14,height:14,background:'linear-gradient(135deg,#00e5a0,#00b8ff)',clipPath:'polygon(50% 0%,100% 50%,50% 100%,0% 50%)'}}/>
-          <span style={{fontFamily:'"DM Mono",monospace',fontSize:9,fontWeight:700,color:'#00e5a0',letterSpacing:'0.1em'}}>{title}</span>
+          <span style={{fontFamily:'DM Mono,monospace',fontSize:9,fontWeight:700,color:'#00e5a0',letterSpacing:'0.1em'}}>{title}</span>
         </div>
         <div style={{display:'flex',gap:4}}>
           {['#ef4444','#f97316','#22c55e'].map((c,i)=><div key={i} style={{width:7,height:7,borderRadius:'50%',background:c,boxShadow:`0 0 5px ${c}`}}/>)}
@@ -293,7 +294,7 @@ function DeviceSkeleton({children,title}:{children:React.ReactNode;title:string}
         <div style={{display:'flex',gap:3}}>
           {[0,1,2].map(i=><div key={i} style={{width:8,height:6,borderRadius:1,background:'#0a1628',border:'1px solid #1e3a5f'}}/>)}
         </div>
-        <div style={{fontFamily:'"DM Mono",monospace',fontSize:6,color:'#1e3a5f',letterSpacing:'0.1em'}}>NFT HACKING DEVICE</div>
+        <div style={{fontFamily:'DM Mono,monospace',fontSize:6,color:'#1e3a5f',letterSpacing:'0.1em'}}>NFT HACKING DEVICE</div>
         <div style={{display:'flex',gap:3}}>
           {[0,1].map(i=><div key={i} style={{width:10,height:10,borderRadius:'50%',background:'radial-gradient(circle at 35% 30%,#1a2a3a,#050d17)',border:'1px solid #1e3a5f'}}/>)}
         </div>
@@ -378,14 +379,14 @@ function DemoPanel(){
       {/* Mini ticket */}
       <div style={{background:'#020a14',border:'1px solid #0d2035',borderRadius:6,overflow:'hidden',marginBottom:8}}>
         <div style={{display:'grid',gridTemplateColumns:'repeat(9,1fr)',borderBottom:'1px solid #0d2035'}}>
-          {COL_HEADERS.map((h,i)=><div key={i} style={{padding:'1px 0',textAlign:'center',fontFamily:'"DM Mono",monospace',fontSize:5,color:'#1e3a5f',borderRight:i<8?'1px solid #0d2035':'none',background:'#030a12'}}>{h}</div>)}
+          {COL_HEADERS.map((h,i)=><div key={i} style={{padding:'1px 0',textAlign:'center',fontFamily:'DM Mono,monospace',fontSize:5,color:'#1e3a5f',borderRight:i<8?'1px solid #0d2035':'none',background:'#030a12'}}>{h}</div>)}
         </div>
         {localDev.grid.map((row,ri)=>(
           <div key={ri} style={{display:'grid',gridTemplateColumns:'repeat(9,1fr)',borderBottom:ri<2?'1px solid #0d2035':'none'}}>
             {row.map((cell,ci)=>(
               <div key={ci} style={{height:18,display:'flex',alignItems:'center',justifyContent:'center',borderRight:ci<8?'1px solid #0d2035':'none',
                 background:cell.clicked?'rgba(255,255,255,0.1)':'transparent',
-                fontFamily:'"DM Mono",monospace',fontSize:8,fontWeight:700,
+                fontFamily:'DM Mono,monospace',fontSize:8,fontWeight:700,
                 color:!cell.num?'transparent':'#fff',
                 textShadow:cell.clicked?'0 0 6px #fff,0 0 12px rgba(255,255,255,0.8)':'0 0 2px rgba(255,255,255,0.3)',
                 opacity:!cell.num?0:cell.clicked?1:0.4,
@@ -398,12 +399,12 @@ function DemoPanel(){
       {/* Current broadcast number + LEDs */}
       <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:8}}>
         <div style={{background:'#030a12',border:'1px solid #0d2035',borderRadius:6,padding:'4px 10px',textAlign:'center',minWidth:50}}>
-          <div style={{fontFamily:'"DM Mono",monospace',fontSize:6,color:'#1e4a6a'}}>BROADCAST</div>
-          <div style={{fontFamily:'"Syne",sans-serif',fontSize:28,fontWeight:800,color:'#fff',lineHeight:1,
+          <div style={{fontFamily:'DM Mono,monospace',fontSize:6,color:'#1e4a6a'}}>BROADCAST</div>
+          <div style={{fontFamily:'Syne,sans-serif',fontSize:28,fontWeight:800,color:'#fff',lineHeight:1,
             textShadow:'0 0 12px #fff,0 0 24px rgba(255,255,255,0.6)'}}>{demoNum??'—'}</div>
         </div>
         <div style={{flex:1}}>
-          <div style={{fontFamily:'"DM Mono",monospace',fontSize:6.5,color:'#1e4a6a',marginBottom:4}}>WIN STATUS</div>
+          <div style={{fontFamily:'DM Mono,monospace',fontSize:6.5,color:'#1e4a6a',marginBottom:4}}>WIN STATUS</div>
           {LED_TYPES.map((type,i)=>{
             const ws=demoWinStates[type]
             const color=LED_COLORS[type]
@@ -419,7 +420,7 @@ function DemoPanel(){
                 }}>
                   {ws.broken&&<div style={{position:'absolute',inset:0,background:`radial-gradient(circle,${color}50 20%,transparent 70%)`,animation:'filamentGlow 2s infinite'}}/>}
                 </div>
-                <div style={{fontFamily:'"DM Mono",monospace',fontSize:6,color:ws.claimed?'#22c55e':ws.claimable?color:'#1e4a6a',flex:1,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>
+                <div style={{fontFamily:'DM Mono,monospace',fontSize:6,color:ws.claimed?'#22c55e':ws.claimable?color:'#1e4a6a',flex:1,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>
                   {WIN_LABELS[type]}
                 </div>
               </div>
@@ -431,11 +432,11 @@ function DemoPanel(){
       {/* Messages */}
       <div style={{background:'#030a12',border:'1px solid #0d2035',borderRadius:5,padding:'5px 8px',maxHeight:60,overflowY:'auto',marginBottom:8}}>
         {msgs.slice(-5).map((m,i)=>(
-          <div key={i} style={{fontFamily:'"DM Mono",monospace',fontSize:6.5,color:'#00e5a0',marginBottom:1}}>{m}</div>
+          <div key={i} style={{fontFamily:'DM Mono,monospace',fontSize:6.5,color:'#00e5a0',marginBottom:1}}>{m}</div>
         ))}
       </div>
 
-      <button onClick={startDemo} style={{width:'100%',background:running?'#0a1628':'linear-gradient(135deg,#00e5a0,#00b8ff)',color:running?'#2a5a7a':'#000',border:running?'1px solid #1e3a5f':'none',borderRadius:8,padding:'10px',fontFamily:'"DM Mono",monospace',fontSize:10,fontWeight:700,cursor:running?'default':'pointer'}}>
+      <button onClick={startDemo} style={{width:'100%',background:running?'#0a1628':'linear-gradient(135deg,#00e5a0,#00b8ff)',color:running?'#2a5a7a':'#000',border:running?'1px solid #1e3a5f':'none',borderRadius:8,padding:'10px',fontFamily:'DM Mono,monospace',fontSize:10,fontWeight:700,cursor:running?'default':'pointer'}}>
         {running?'⏳ DEMO RUNNING...':'▶ RUN DEMO HACK'}
       </button>
     </div>
@@ -446,7 +447,7 @@ function DemoPanel(){
 function RulesPanel(){
   return(
     <div style={{background:'#030a12',border:'1px solid #0d2035',borderRadius:8,padding:'10px 12px'}}>
-      <div style={{fontFamily:'"DM Mono",monospace',fontSize:8,color:'#00e5a0',marginBottom:8,letterSpacing:'0.1em'}}>◉ HOW TO PLAY — RANSOME RULES</div>
+      <div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#00e5a0',marginBottom:8,letterSpacing:'0.1em'}}>◉ HOW TO PLAY — RANSOME RULES</div>
       {[
         ['1','MINT','Buy NFT hacking devices (1 token each). Each device is a unique 3×9 housie ticket.'],
         ['2','ACTIVATE','Connect your devices to the live bank. Only active devices participate.'],
@@ -458,11 +459,11 @@ function RulesPanel(){
       ].map(([n,title,desc])=>(
         <div key={n} style={{display:'flex',gap:8,marginBottom:7,alignItems:'flex-start'}}>
           <div style={{width:16,height:16,borderRadius:'50%',background:'#0a1628',border:'1px solid #00e5a040',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,marginTop:1}}>
-            <span style={{fontFamily:'"DM Mono",monospace',fontSize:7,color:'#00e5a0',fontWeight:700}}>{n}</span>
+            <span style={{fontFamily:'DM Mono,monospace',fontSize:7,color:'#00e5a0',fontWeight:700}}>{n}</span>
           </div>
           <div>
-            <div style={{fontFamily:'"DM Mono",monospace',fontSize:8,color:'#4a7fa5',fontWeight:700,marginBottom:1}}>{title}</div>
-            <div style={{fontFamily:'"DM Mono",monospace',fontSize:7,color:'#2a5a7a',lineHeight:1.5}}>{desc}</div>
+            <div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#4a7fa5',fontWeight:700,marginBottom:1}}>{title}</div>
+            <div style={{fontFamily:'DM Mono,monospace',fontSize:7,color:'#2a5a7a',lineHeight:1.5}}>{desc}</div>
           </div>
         </div>
       ))}
@@ -477,7 +478,7 @@ function MintPanel({wallet,devices,mintCount,mintToken,setMintCount,setMintToken
   onMint:()=>void;onEnterGame:()=>void;onConnectWallet:()=>void
 }){
   const[tab,setTab]=useState<'mint'|'demo'|'rules'>('mint')
-  const btnBase:React.CSSProperties={fontFamily:'"DM Mono",monospace',fontSize:11,cursor:'pointer',borderRadius:8,padding:'8px 14px',fontWeight:600,border:'none'}
+  const btnBase:React.CSSProperties={fontFamily:'DM Mono,monospace',fontSize:11,cursor:'pointer',borderRadius:8,padding:'8px 14px',fontWeight:600,border:'none'}
   return(
     <div>
       {/* Tab bar */}
@@ -499,12 +500,12 @@ function MintPanel({wallet,devices,mintCount,mintToken,setMintCount,setMintToken
         <div>
           {!wallet?(
             <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:14,padding:'20px 0'}}>
-              <div style={{fontFamily:'"DM Mono",monospace',fontSize:8,color:'#1e4a6a',textAlign:'center',lineHeight:1.7}}>Connect your wallet to mint<br/>NFT hacking devices</div>
+              <div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#1e4a6a',textAlign:'center',lineHeight:1.7}}>Connect your wallet to mint<br/>NFT hacking devices</div>
               <button onClick={onConnectWallet} style={{...btnBase,background:'linear-gradient(135deg,#00e5a0,#00b8ff)',color:'#000',padding:'14px 28px',fontSize:12,fontWeight:700,borderRadius:10,boxShadow:'0 4px 20px rgba(0,229,160,0.3)'}}>CONNECT WALLET →</button>
             </div>
           ):(
             <>
-              <div style={{fontFamily:'"DM Mono",monospace',fontSize:8,color:'#2a5a7a',marginBottom:6}}>SELECT TOKEN</div>
+              <div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#2a5a7a',marginBottom:6}}>SELECT TOKEN</div>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr 1fr',gap:6,marginBottom:12}}>
                 {['USDT','USDC','SOL','RNSM'].map(t=>(
                   <button key={t} onClick={()=>setMintToken(t)} style={{...btnBase,padding:'10px 6px',fontSize:10,
@@ -513,7 +514,7 @@ function MintPanel({wallet,devices,mintCount,mintToken,setMintCount,setMintToken
                     border:`1px solid ${mintToken===t?'#00e5a040':'#0a2535'}`}}>{t}</button>
                 ))}
               </div>
-              <div style={{fontFamily:'"DM Mono",monospace',fontSize:8,color:'#2a5a7a',marginBottom:6}}>QUANTITY</div>
+              <div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#2a5a7a',marginBottom:6}}>QUANTITY</div>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr 1fr',gap:6,marginBottom:8}}>
                 {[1,3,5,10].map(n=>(
                   <button key={n} onClick={()=>setMintCount(n)} style={{...btnBase,padding:'10px 6px',fontSize:12,
@@ -524,17 +525,17 @@ function MintPanel({wallet,devices,mintCount,mintToken,setMintCount,setMintToken
               </div>
               <div style={{display:'flex',gap:8,alignItems:'center',marginBottom:12}}>
                 <input type="number" value={mintCount} onChange={e=>setMintCount(Math.max(1,parseInt(e.target.value)||1))}
-                  style={{flex:1,background:'#0a1628',border:'1px solid #0a2535',borderRadius:8,padding:'10px 12px',fontFamily:'"DM Mono",monospace',fontSize:12,color:'#00e5a0',outline:'none'}}/>
+                  style={{flex:1,background:'#0a1628',border:'1px solid #0a2535',borderRadius:8,padding:'10px 12px',fontFamily:'DM Mono,monospace',fontSize:12,color:'#00e5a0',outline:'none'}}/>
                 <button onClick={onMint} style={{...btnBase,background:'linear-gradient(135deg,#00e5a0,#00b8ff)',color:'#000',padding:'12px 20px',fontSize:12,fontWeight:700,borderRadius:10,boxShadow:'0 0 16px rgba(0,229,160,0.3)',whiteSpace:'nowrap'}}>MINT →</button>
               </div>
               {devices.length>0&&(
                 <div style={{background:'rgba(0,229,160,0.04)',border:'1px solid rgba(0,229,160,0.12)',borderRadius:8,padding:'8px 10px',marginBottom:12}}>
-                  <div style={{fontFamily:'"DM Mono",monospace',fontSize:8,color:'#00e5a0',marginBottom:4}}>YOUR DEVICES ({devices.length})</div>
+                  <div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#00e5a0',marginBottom:4}}>YOUR DEVICES ({devices.length})</div>
                   <div style={{display:'flex',flexWrap:'wrap',gap:4}}>
                     {devices.slice(0,6).map(d=>(
-                      <div key={d.id} style={{fontFamily:'"DM Mono",monospace',fontSize:7,color:d.active?'#22c55e':'#1e4a6a',background:'#0a1628',border:`1px solid ${d.active?'#22c55e30':'#0a2535'}`,borderRadius:4,padding:'2px 6px'}}>{d.nftId}</div>
+                      <div key={d.id} style={{fontFamily:'DM Mono,monospace',fontSize:7,color:d.active?'#22c55e':'#1e4a6a',background:'#0a1628',border:`1px solid ${d.active?'#22c55e30':'#0a2535'}`,borderRadius:4,padding:'2px 6px'}}>{d.nftId}</div>
                     ))}
-                    {devices.length>6&&<div style={{fontFamily:'"DM Mono",monospace',fontSize:7,color:'#1e4a6a'}}>+{devices.length-6}</div>}
+                    {devices.length>6&&<div style={{fontFamily:'DM Mono,monospace',fontSize:7,color:'#1e4a6a'}}>+{devices.length-6}</div>}
                   </div>
                 </div>
               )}
@@ -579,8 +580,8 @@ function LedProgress({type,ws,devices}:{type:WinType;ws:WinState;devices:Device[
       </div>
       <div style={{flex:1}}>
         <div style={{display:'flex',justifyContent:'space-between',marginBottom:2}}>
-          <span style={{fontFamily:'"DM Mono",monospace',fontSize:7,color:ws.claimed?'#22c55e':ws.claimable?color:ws.broken?color+'60':'#2a5a7a',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',maxWidth:100}}>{WIN_LABELS[type]}</span>
-          <span style={{fontFamily:'"DM Mono",monospace',fontSize:6,color:'#1e4a6a'}}>{Math.round(prog*100)}%</span>
+          <span style={{fontFamily:'DM Mono,monospace',fontSize:7,color:ws.claimed?'#22c55e':ws.claimable?color:ws.broken?color+'60':'#2a5a7a',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',maxWidth:100}}>{WIN_LABELS[type]}</span>
+          <span style={{fontFamily:'DM Mono,monospace',fontSize:6,color:'#1e4a6a'}}>{Math.round(prog*100)}%</span>
         </div>
         <div style={{height:3,background:'#0a1628',borderRadius:2,overflow:'hidden'}}>
           <div style={{height:'100%',width:`${prog*100}%`,background:prog>=1?color:`linear-gradient(90deg,${color}60,${color})`,borderRadius:2,boxShadow:prog>=1?`0 0 5px ${color}`:'none',transition:'width 0.4s ease'}}/>
@@ -639,15 +640,15 @@ function HackingDevice({device,currentNum,clickWindowOpen,calledNums,onCellClick
         <div style={{display:'flex',alignItems:'center',gap:4}}>
           <div style={{width:11,height:11,background:'linear-gradient(135deg,#00e5a0,#00b8ff)',clipPath:'polygon(50% 0%,100% 50%,50% 100%,0% 50%)',flexShrink:0}}/>
           <div style={{display:'flex',flexDirection:'column'}}>
-            <span style={{fontFamily:'"DM Mono",monospace',fontSize:7,fontWeight:700,color:'#00e5a0'}}>{device.nftId}</span>
-            {device.walletAddr&&<span style={{fontFamily:'"DM Mono",monospace',fontSize:5,color:'#0a2535',letterSpacing:'0.03em'}}>⛓ {device.walletAddr.slice(0,10)}…</span>}
+            <span style={{fontFamily:'DM Mono,monospace',fontSize:7,fontWeight:700,color:'#00e5a0'}}>{device.nftId}</span>
+            {device.walletAddr&&<span style={{fontFamily:'DM Mono,monospace',fontSize:5,color:'#0a2535',letterSpacing:'0.03em'}}>⛓ {device.walletAddr.slice(0,10)}…</span>}
           </div>
         </div>
         <div style={{flex:1,height:14,background:'rgba(0,229,160,0.03)',border:'1px dashed #0a2535',borderRadius:3,display:'flex',alignItems:'center',justifyContent:'center',margin:'0 3px'}}>
-          <span style={{fontFamily:'"DM Mono",monospace',fontSize:5,color:'#0a2535'}}>AD</span>
+          <span style={{fontFamily:'DM Mono,monospace',fontSize:5,color:'#0a2535'}}>AD</span>
         </div>
         <div style={{display:'flex',alignItems:'center',gap:3}}>
-          <span style={{fontFamily:'"DM Mono",monospace',fontSize:6,color:'#1e4a6a'}}>{nc}/15</span>
+          <span style={{fontFamily:'DM Mono,monospace',fontSize:6,color:'#1e4a6a'}}>{nc}/15</span>
           <div style={{width:5,height:5,borderRadius:'50%',background:device.active?'#22c55e':'#1e3a5f',animation:device.active?'dot 1.5s infinite':'none'}}/>
         </div>
       </div>
@@ -655,31 +656,31 @@ function HackingDevice({device,currentNum,clickWindowOpen,calledNums,onCellClick
       {device.active?(
         <div style={{background:'#030a12',margin:'3px 5px 0',borderRadius:5,border:'1px solid #0d2035',padding:'2px 5px',display:'flex',alignItems:'center',gap:4,position:'relative',overflow:'hidden'}}>
           <div style={{position:'absolute',inset:0,backgroundImage:'repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px)',pointerEvents:'none'}}/>
-          <span style={{fontFamily:'"DM Mono",monospace',fontSize:5,color:'#1e4a6a',zIndex:1}}>BANK</span>
-          <span style={{fontFamily:'"Syne",sans-serif',fontSize:16,fontWeight:800,color:'#fff',lineHeight:1,zIndex:1,textShadow:currentNum?'0 0 8px #fff':'none'}}>{currentNum??'—'}</span>
+          <span style={{fontFamily:'DM Mono,monospace',fontSize:5,color:'#1e4a6a',zIndex:1}}>BANK</span>
+          <span style={{fontFamily:'Syne,sans-serif',fontSize:16,fontWeight:800,color:'#fff',lineHeight:1,zIndex:1,textShadow:currentNum?'0 0 8px #fff':'none'}}>{currentNum??'—'}</span>
           <div style={{display:'flex',flexDirection:'column',gap:1,zIndex:1}}>
             <div style={{display:'flex',alignItems:'center',gap:2}}>
               <div style={{width:3,height:3,borderRadius:'50%',background:clickWindowOpen?'#22c55e':'#ef4444',animation:clickWindowOpen?'dot 1s infinite':'none'}}/>
-              <span style={{fontFamily:'"DM Mono",monospace',fontSize:5,color:clickWindowOpen?'#22c55e':'#ef4444'}}>{clickWindowOpen?'OPEN':'CLOSED'}</span>
+              <span style={{fontFamily:'DM Mono,monospace',fontSize:5,color:clickWindowOpen?'#22c55e':'#ef4444'}}>{clickWindowOpen?'OPEN':'CLOSED'}</span>
             </div>
-            <span style={{fontFamily:'"DM Mono",monospace',fontSize:5,color:'#1e4a6a'}}>{BANKS[liveBank]?.name?.split(' ')[0]??''}</span>
+            <span style={{fontFamily:'DM Mono,monospace',fontSize:5,color:'#1e4a6a'}}>{BANKS[liveBank]?.name?.split(' ')[0]??''}</span>
           </div>
           <div style={{marginLeft:'auto',display:'flex',gap:2,zIndex:1}}>
             {Array.from(calledNums).slice(-3).reverse().map((n,i)=>(
-              <div key={i} style={{width:12,height:12,borderRadius:2,display:'flex',alignItems:'center',justifyContent:'center',background:'#0a1628',border:'1px solid #1e3a5f',fontFamily:'"DM Mono",monospace',fontSize:6,color:'#2a5a7a',opacity:1-i*0.25}}>{n}</div>
+              <div key={i} style={{width:12,height:12,borderRadius:2,display:'flex',alignItems:'center',justifyContent:'center',background:'#0a1628',border:'1px solid #1e3a5f',fontFamily:'DM Mono,monospace',fontSize:6,color:'#2a5a7a',opacity:1-i*0.25}}>{n}</div>
             ))}
           </div>
         </div>
       ):(
         <div style={{margin:'3px 5px 0',background:'#030a12',border:'1px solid #0d2035',borderRadius:5,padding:'4px 7px',display:'flex',alignItems:'center',justifyContent:'space-between',gap:4}}>
-          <span style={{fontFamily:'"DM Mono",monospace',fontSize:6,color:'#1e4a6a'}}>Disconnected</span>
-          <button onClick={()=>onActivate(device.id)} style={{background:'linear-gradient(135deg,#00e5a0,#00b8ff)',color:'#000',border:'none',borderRadius:4,padding:'3px 7px',fontFamily:'"DM Mono",monospace',fontSize:7,fontWeight:700,cursor:'pointer'}}>ACTIVATE ⚡</button>
+          <span style={{fontFamily:'DM Mono,monospace',fontSize:6,color:'#1e4a6a'}}>Disconnected</span>
+          <button onClick={()=>onActivate(device.id)} style={{background:'linear-gradient(135deg,#00e5a0,#00b8ff)',color:'#000',border:'none',borderRadius:4,padding:'3px 7px',fontFamily:'DM Mono,monospace',fontSize:7,fontWeight:700,cursor:'pointer'}}>ACTIVATE ⚡</button>
         </div>
       )}
       {/* Grid */}
       <div style={{margin:'3px 5px 0',background:'#020a14',border:'1px solid #0d2035',borderRadius:4,overflow:'hidden'}}>
         <div style={{display:'grid',gridTemplateColumns:'repeat(9,1fr)',borderBottom:'1px solid #0d2035'}}>
-          {COL_HEADERS.map((h,i)=><div key={i} style={{padding:'1px 0',textAlign:'center',fontFamily:'"DM Mono",monospace',fontSize:4.5,color:'#1e3a5f',borderRight:i<8?'1px solid #0d2035':'none',background:'#030a12'}}>{h}</div>)}
+          {COL_HEADERS.map((h,i)=><div key={i} style={{padding:'1px 0',textAlign:'center',fontFamily:'DM Mono,monospace',fontSize:4.5,color:'#1e3a5f',borderRight:i<8?'1px solid #0d2035':'none',background:'#030a12'}}>{h}</div>)}
         </div>
         {device.grid.map((row,ri)=>(
           <div key={ri} style={{display:'grid',gridTemplateColumns:'repeat(9,1fr)',borderBottom:ri<2?'1px solid #0d2035':'none'}}>
@@ -695,7 +696,7 @@ function HackingDevice({device,currentNum,clickWindowOpen,calledNums,onCellClick
                   borderRight:ci<8?'1px solid #0d2035':'none',
                   background:isEmpty?'#020a14':cell.clicked?'rgba(255,255,255,0.08)':isClick?'rgba(255,255,255,0.05)':'transparent',
                   boxShadow:isClick?'inset 0 0 0 1.5px rgba(255,255,255,0.9)':'none',
-                  color:'#ffffff',fontFamily:'"DM Mono",monospace',fontSize:9,fontWeight:700,
+                  color:'#ffffff',fontFamily:'DM Mono,monospace',fontSize:9,fontWeight:700,
                   textShadow:isEmpty?'none':cell.clicked?'0 0 6px #fff,0 0 12px rgba(255,255,255,0.8)':isClick?'0 0 10px #fff':'0 0 2px rgba(255,255,255,0.35)',
                   opacity:isEmpty?0:cell.clicked?1:isClick?1:0.45,
                   animation:(!isEmpty&&!isClick&&!cell.clicked)?glitch:'none',
@@ -734,9 +735,9 @@ function HackingDevice({device,currentNum,clickWindowOpen,calledNums,onCellClick
               {ws.broken&&!type.startsWith('FULL_HOUSE')&&(
                 <div style={{position:'absolute',inset:0,background:`radial-gradient(circle,${LED_COLORS[type]}ff 0%,${LED_COLORS[type]}99 30%,transparent 75%)`,animation:'filamentGlow 1.5s ease-in-out infinite'}}/>
               )}
-              {ws.broken&&type==='FULL_HOUSE_1'&&<div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'"DM Mono",monospace',fontSize:6,fontWeight:700,color:LED_COLORS[type],textShadow:`0 0 4px ${LED_COLORS[type]}`}}>1</div>}
-              {ws.broken&&type==='FULL_HOUSE_2'&&<div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'"DM Mono",monospace',fontSize:6,fontWeight:700,color:LED_COLORS[type],textShadow:`0 0 4px ${LED_COLORS[type]}`}}>2</div>}
-              {ws.broken&&type==='FULL_HOUSE_3'&&<div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'"DM Mono",monospace',fontSize:6,fontWeight:700,color:LED_COLORS[type],textShadow:`0 0 4px ${LED_COLORS[type]}`}}>3</div>}
+              {ws.broken&&type==='FULL_HOUSE_1'&&<div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'DM Mono,monospace',fontSize:6,fontWeight:700,color:LED_COLORS[type],textShadow:`0 0 4px ${LED_COLORS[type]}`}}>1</div>}
+              {ws.broken&&type==='FULL_HOUSE_2'&&<div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'DM Mono,monospace',fontSize:6,fontWeight:700,color:LED_COLORS[type],textShadow:`0 0 4px ${LED_COLORS[type]}`}}>2</div>}
+              {ws.broken&&type==='FULL_HOUSE_3'&&<div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'DM Mono,monospace',fontSize:6,fontWeight:700,color:LED_COLORS[type],textShadow:`0 0 4px ${LED_COLORS[type]}`}}>3</div>}
               {won&&ws.bursting&&<div style={{position:'absolute',inset:-8,borderRadius:'50%',background:`radial-gradient(circle,${LED_COLORS[type]}99 0%,transparent 70%)`,animation:'burstRing 0.5s ease-out forwards',pointerEvents:'none'}}/>}
             </div>
           )
@@ -761,7 +762,7 @@ function HackingDevice({device,currentNum,clickWindowOpen,calledNums,onCellClick
           boxShadow:canClaim?'inset 0 0 10px rgba(255,32,32,0.3),0 0 10px rgba(255,32,32,0.4)':bestPct>0.5?`inset 0 0 ${Math.round(bestPct*8)}px ${proxColor}30,0 0 ${Math.round(bestPct*10)}px ${proxColor}30`:'none',
           margin:'0 2px',
         }}>
-          <span style={{fontFamily:'"Syne",sans-serif',fontSize:11,fontWeight:800,letterSpacing:'0.1em',
+          <span style={{fontFamily:'Syne,sans-serif',fontSize:11,fontWeight:800,letterSpacing:'0.1em',
             color:canClaim?'#ff4040':bestPct>0.6?proxColor:'#1e3a5f',
             textShadow:canClaim?'0 0 8px #ff2020,0 0 20px #ff202080':bestPct>0.6?`0 0 6px ${proxColor}`:'none'}}>RANSOM</span>
         </button>
@@ -856,7 +857,7 @@ function VaultSketch({pct,paid}:{pct:number;paid:number}){
 
       {/* ── Amount label ── */}
       <text x="60" y="105" textAnchor="middle" fontSize="7" fill="#00e5a0" fontWeight="700"
-        fontFamily='"DM Mono",monospace'>${(paid/1000).toFixed(0)}K CLAIMED</text>
+        fontFamily='DM Mono,monospace'>${(paid/1000).toFixed(0)}K CLAIMED</text>
     </svg>
   )
 }
@@ -873,14 +874,14 @@ function RnsmChart({prices,trend,live,contractAddr}:{prices:number[];trend:boole
     <div style={{height:60,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',
       background:'#010a10',border:'1px dashed #0a2535',borderRadius:6,gap:4}}>
       <div style={{fontSize:16}}>📈</div>
-      <span style={{fontFamily:'"DM Mono",monospace',fontSize:6,color:'#0a2535',textAlign:'center',lineHeight:1.4}}>enter contract addr{'\n'}to show live chart</span>
+      <span style={{fontFamily:'DM Mono,monospace',fontSize:6,color:'#0a2535',textAlign:'center',lineHeight:1.4}}>enter contract addr{'\n'}to show live chart</span>
     </div>
   )
   return(
     <div style={{background:'#010a10',border:'1px solid #0a2535',borderRadius:6,padding:'4px 6px'}}>
       <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:2}}>
-        <span style={{fontFamily:'"DM Mono",monospace',fontSize:6,color:'#1e4a6a'}}>RNSM/USDT</span>
-        <span style={{fontFamily:'"DM Mono",monospace',fontSize:7.5,fontWeight:700,color:col}}>{trend?'▲':'▼'} ${live.toFixed(4)}</span>
+        <span style={{fontFamily:'DM Mono,monospace',fontSize:6,color:'#1e4a6a'}}>RNSM/USDT</span>
+        <span style={{fontFamily:'DM Mono,monospace',fontSize:7.5,fontWeight:700,color:col}}>{trend?'▲':'▼'} ${live.toFixed(4)}</span>
       </div>
       <svg width="100%" height={H} viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none">
         <defs>
@@ -932,7 +933,7 @@ function WinnersTerminal({winRecords}:{winRecords:WinRecord[]}){
   useEffect(()=>{const el=scrollRef.current;if(el)el.scrollTop=el.scrollHeight},[lines])
 
   return(
-    <div ref={scrollRef} style={{overflowY:'auto',maxHeight:72,fontFamily:'"DM Mono",monospace',fontSize:6.5,lineHeight:1.7}}>
+    <div ref={scrollRef} style={{overflowY:'auto',maxHeight:72,fontFamily:'DM Mono,monospace',fontSize:6.5,lineHeight:1.7}}>
       {lines.length===0?(
         <span style={{color:'#0a2535'}}>awaiting claim<span style={{opacity:cursor?1:0,color:'#1e4a6a'}}>_</span></span>
       ):lines.map((l,i)=>(
@@ -1003,7 +1004,7 @@ function HackMatrixDisplay({calledNums,calledOrder,clickWindowOpen,preGameSecs,w
         <div style={{position:'absolute',inset:0,overflow:'hidden',pointerEvents:'none',zIndex:0}}>
           {bgCmds.map((cmd,i)=>(
             <div key={i} style={{position:'absolute',left:`${cmd.x}%`,top:`${cmd.y}%`,
-              fontFamily:'"DM Mono",monospace',fontSize:6,color:cmd.col,opacity:cmd.op,
+              fontFamily:'DM Mono,monospace',fontSize:6,color:cmd.col,opacity:cmd.op,
               whiteSpace:'nowrap',transform:'translateX(-50%)',
               animation:`gx${i%3} ${3+i%2}s ${i*0.1}s infinite`}}>
               {cmd.cmd}... {cmd.st}
@@ -1014,19 +1015,19 @@ function HackMatrixDisplay({calledNums,calledOrder,clickWindowOpen,preGameSecs,w
         <div style={{position:'relative',zIndex:1,flex:1,display:'flex',flexDirection:'column'}}>
           {/* Header */}
           <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:8}}>
-            <span style={{fontFamily:'"DM Mono",monospace',fontSize:8,color:'#2a5a7a',letterSpacing:'0.15em'}}>◉ HACK MATRIX</span>
+            <span style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#2a5a7a',letterSpacing:'0.15em'}}>◉ HACK MATRIX</span>
             <div style={{display:'flex',alignItems:'center',gap:4}}>
               <div style={{width:5,height:5,borderRadius:'50%',background:'#22c55e',animation:'dot 1.5s infinite'}}/>
-              <span style={{fontFamily:'"DM Mono",monospace',fontSize:7,color:'#22c55e'}}>LIVE</span>
+              <span style={{fontFamily:'DM Mono,monospace',fontSize:7,color:'#22c55e'}}>LIVE</span>
             </div>
           </div>
 
           {preGameSecs>0&&calledOrder.length===0?(
             <div style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:8}}>
-              <div style={{fontFamily:'"DM Mono",monospace',fontSize:8,color:'#2a5a7a',letterSpacing:'0.2em'}}>HACK INITIATES IN</div>
-              <div style={{fontFamily:'"Syne",sans-serif',fontSize:56,fontWeight:800,color:'#fff',lineHeight:1,
+              <div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#2a5a7a',letterSpacing:'0.2em'}}>HACK INITIATES IN</div>
+              <div style={{fontFamily:'Syne,sans-serif',fontSize:56,fontWeight:800,color:'#fff',lineHeight:1,
                 textShadow:'0 0 30px #fff,0 0 60px rgba(255,255,255,0.4)'}}>{fmtTime(preGameSecs)}</div>
-              <div style={{fontFamily:'"DM Mono",monospace',fontSize:7,color:'#1e4a6a'}}>ACTIVATE YOUR DEVICES NOW</div>
+              <div style={{fontFamily:'DM Mono,monospace',fontSize:7,color:'#1e4a6a'}}>ACTIVATE YOUR DEVICES NOW</div>
             </div>
           ):(
             <div style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'flex-start',gap:8,paddingTop:4}}>
@@ -1034,20 +1035,20 @@ function HackMatrixDisplay({calledNums,calledOrder,clickWindowOpen,preGameSecs,w
               <div style={{textAlign:'center',position:'relative'}}>
                 {lastNum!==null?(
                   <>
-                    <div style={{fontFamily:'"Syne",sans-serif',fontSize:72,fontWeight:800,lineHeight:1,color:'#fff',
+                    <div style={{fontFamily:'Syne,sans-serif',fontSize:72,fontWeight:800,lineHeight:1,color:'#fff',
                       textShadow:'0 0 20px #fff,0 0 40px rgba(255,255,255,0.6)',
                       animation:glitching?'matrixGlitch 0.6s ease':'numAppear 0.4s cubic-bezier(.34,1.56,.64,1)'}}>
                       {lastNum}
                     </div>
                     {glitching&&(<>
-                      <div style={{position:'absolute',inset:0,fontFamily:'"Syne",sans-serif',fontSize:72,fontWeight:800,
+                      <div style={{position:'absolute',inset:0,fontFamily:'Syne,sans-serif',fontSize:72,fontWeight:800,
                         color:'#ff0040',opacity:0.5,animation:'glitchR 0.6s ease',pointerEvents:'none'}}>{lastNum}</div>
-                      <div style={{position:'absolute',inset:0,fontFamily:'"Syne",sans-serif',fontSize:72,fontWeight:800,
+                      <div style={{position:'absolute',inset:0,fontFamily:'Syne,sans-serif',fontSize:72,fontWeight:800,
                         color:'#00b8ff',opacity:0.5,animation:'glitchB 0.6s ease',pointerEvents:'none'}}>{lastNum}</div>
                     </>)}
                   </>
                 ):(
-                  <div style={{fontFamily:'"DM Mono",monospace',fontSize:32,fontWeight:400,color:'#1e4a6a',lineHeight:2.2,letterSpacing:'0.2em'}}>
+                  <div style={{fontFamily:'DM Mono,monospace',fontSize:32,fontWeight:400,color:'#1e4a6a',lineHeight:2.2,letterSpacing:'0.2em'}}>
                     STANDBY
                   </div>
                 )}
@@ -1060,7 +1061,7 @@ function HackMatrixDisplay({calledNums,calledOrder,clickWindowOpen,preGameSecs,w
                   border:`1px solid ${clickWindowOpen?'rgba(34,197,94,0.4)':'rgba(239,68,68,0.2)'}`,borderRadius:20}}>
                   <div style={{width:4,height:4,borderRadius:'50%',background:clickWindowOpen?'#22c55e':'#ef4444',
                     animation:clickWindowOpen?'dot 1s infinite':'none'}}/>
-                  <span style={{fontFamily:'"DM Mono",monospace',fontSize:7,color:clickWindowOpen?'#22c55e':'#ef4444'}}>
+                  <span style={{fontFamily:'DM Mono,monospace',fontSize:7,color:clickWindowOpen?'#22c55e':'#ef4444'}}>
                     {clickWindowOpen?'CLICK WINDOW OPEN':'WINDOW CLOSED'}
                   </span>
                 </div>
@@ -1073,7 +1074,7 @@ function HackMatrixDisplay({calledNums,calledOrder,clickWindowOpen,preGameSecs,w
                         strokeDasharray={`${dash} ${circ}`} strokeLinecap="round" style={{transition:'stroke-dasharray 0.9s linear,stroke 0.3s'}}/>
                     </svg>
                     <div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',justifyContent:'center'}}>
-                      <span style={{fontFamily:'"DM Mono",monospace',fontSize:6,fontWeight:700,color:danger?'#ef4444':'#00e5a0'}}>{String(timer%60).padStart(2,'0')}</span>
+                      <span style={{fontFamily:'DM Mono,monospace',fontSize:6,fontWeight:700,color:danger?'#ef4444':'#00e5a0'}}>{String(timer%60).padStart(2,'0')}</span>
                     </div>
                   </div>
                 )})()}
@@ -1085,7 +1086,7 @@ function HackMatrixDisplay({calledNums,calledOrder,clickWindowOpen,preGameSecs,w
                   {prev5.map((n,i)=>(
                     <div key={i} style={{width:22,height:22,borderRadius:4,display:'flex',alignItems:'center',
                       justifyContent:'center',background:'#0a1628',border:'1px solid #1e3a5f',
-                      fontFamily:'"DM Mono",monospace',fontSize:9,color:'#fff',
+                      fontFamily:'DM Mono,monospace',fontSize:9,color:'#fff',
                       opacity:0.72-i*0.12,textShadow:'0 0 4px rgba(255,255,255,0.4)'}}>{n}</div>
                   ))}
                 </div>
@@ -1094,8 +1095,8 @@ function HackMatrixDisplay({calledNums,calledOrder,clickWindowOpen,preGameSecs,w
               {/* Progress bar */}
               <div style={{width:'100%'}}>
                 <div style={{display:'flex',justifyContent:'space-between',marginBottom:3}}>
-                  <span style={{fontFamily:'"DM Mono",monospace',fontSize:6.5,color:'#1e4a6a'}}>NUMBERS DRAWN</span>
-                  <span style={{fontFamily:'"DM Mono",monospace',fontSize:6.5,color:'#2a5a7a'}}>{drawn}/90 · {100-pct}% left</span>
+                  <span style={{fontFamily:'DM Mono,monospace',fontSize:6.5,color:'#1e4a6a'}}>NUMBERS DRAWN</span>
+                  <span style={{fontFamily:'DM Mono,monospace',fontSize:6.5,color:'#2a5a7a'}}>{drawn}/90 · {100-pct}% left</span>
                 </div>
                 <div style={{height:5,background:'#0a1628',borderRadius:3,overflow:'hidden',border:'1px solid #0d2035',position:'relative'}}>
                   <div style={{height:'100%',width:`${pct}%`,borderRadius:3,transition:'width 0.6s ease',
@@ -1109,7 +1110,7 @@ function HackMatrixDisplay({calledNums,calledOrder,clickWindowOpen,preGameSecs,w
 
               {/* Winner feed */}
               <div style={{width:'100%',background:'#010a10',border:'1px solid #0a2535',borderRadius:6,padding:'5px 8px'}}>
-                <div style={{fontFamily:'"DM Mono",monospace',fontSize:6,color:'#1e4a6a',letterSpacing:'0.1em',marginBottom:3}}>
+                <div style={{fontFamily:'DM Mono,monospace',fontSize:6,color:'#1e4a6a',letterSpacing:'0.1em',marginBottom:3}}>
                   🏆 WINNER FEED
                 </div>
                 <WinnersTerminal winRecords={winRecords}/>
@@ -1126,7 +1127,7 @@ function HackMatrixDisplay({calledNums,calledOrder,clickWindowOpen,preGameSecs,w
       <div className="matrix-right-panel" style={{width:170,flexShrink:0,padding:'10px 10px',zIndex:2,display:'flex',flexDirection:'column',gap:6}}>
 
         {/* Bank name */}
-        <div style={{fontFamily:'"DM Mono",monospace',fontSize:6.5,color:'#2a5a7a',letterSpacing:'0.1em',fontWeight:700}}>
+        <div style={{fontFamily:'DM Mono,monospace',fontSize:6.5,color:'#2a5a7a',letterSpacing:'0.1em',fontWeight:700}}>
           🏦 {BANKS[liveBank].name.toUpperCase()}
         </div>
 
@@ -1143,7 +1144,7 @@ function HackMatrixDisplay({calledNums,calledOrder,clickWindowOpen,preGameSecs,w
 
         {/* ── 2. RNSM chart ── */}
         <div>
-          <div style={{fontFamily:'"DM Mono",monospace',fontSize:6,color:'#1e4a6a',letterSpacing:'0.08em',marginBottom:3}}>
+          <div style={{fontFamily:'DM Mono,monospace',fontSize:6,color:'#1e4a6a',letterSpacing:'0.08em',marginBottom:3}}>
             📈 RNSM PRICE
           </div>
           <RnsmChart prices={prices} trend={trend} live={live} contractAddr={contractAddr}/>
@@ -1158,8 +1159,8 @@ function HackMatrixDisplay({calledNums,calledOrder,clickWindowOpen,preGameSecs,w
             ['WINS',String(winRecords.length),'#a855f7'],
           ].map(([k,v,col])=>(
             <div key={k} style={{display:'flex',justifyContent:'space-between',padding:'1.5px 0',borderBottom:'1px solid #070f1a'}}>
-              <span style={{fontFamily:'"DM Mono",monospace',fontSize:6,color:'#1e4a6a'}}>{k}</span>
-              <span style={{fontFamily:'"DM Mono",monospace',fontSize:6.5,color:col,fontWeight:700}}>{v}</span>
+              <span style={{fontFamily:'DM Mono,monospace',fontSize:6,color:'#1e4a6a'}}>{k}</span>
+              <span style={{fontFamily:'DM Mono,monospace',fontSize:6.5,color:col,fontWeight:700}}>{v}</span>
             </div>
           ))}
         </div>
@@ -1224,10 +1225,10 @@ function ChatTerminal({nickname}:{nickname:string}){
 
   return(
     <div style={{display:'flex',flexDirection:'column',background:'#020d1a',border:'1px solid #0a2535',borderRadius:12,overflow:'hidden'}}>
-      <div style={{padding:'5px 10px',borderBottom:'1px solid #0a2535',fontFamily:'"DM Mono",monospace',fontSize:7.5,color:'#00e5a0',display:'flex',alignItems:'center',gap:5,flexShrink:0}}>
+      <div style={{padding:'5px 10px',borderBottom:'1px solid #0a2535',fontFamily:'DM Mono,monospace',fontSize:7.5,color:'#00e5a0',display:'flex',alignItems:'center',gap:5,flexShrink:0}}>
         <div style={{width:5,height:5,borderRadius:'50%',background:'#22c55e',animation:'dot 1.5s infinite'}}/>
         SECURE CHAT
-        {mediaQueue.length>0&&<span style={{marginLeft:'auto',fontFamily:'"DM Mono",monospace',fontSize:6,color:'#f59e0b'}}>▶ {playIdx+1}/{mediaQueue.length} queued</span>}
+        {mediaQueue.length>0&&<span style={{marginLeft:'auto',fontFamily:'DM Mono,monospace',fontSize:6,color:'#f59e0b'}}>▶ {playIdx+1}/{mediaQueue.length} queued</span>}
       </div>
       {/* Media player — sequential queue */}
       {currentMedia&&(
@@ -1239,13 +1240,13 @@ function ChatTerminal({nickname}:{nickname:string}){
             <video ref={videoRef} src={currentMedia.src} autoPlay controls onEnded={handleMediaEnd}
               style={{width:'100%',maxHeight:120,borderRadius:4,display:'block'}}/>
           )}
-          <div style={{fontFamily:'"DM Mono",monospace',fontSize:6,color:'#f59e0b',padding:'2px 4px'}}>{currentMedia.name} · {playIdx+1}/{mediaQueue.length}</div>
+          <div style={{fontFamily:'DM Mono,monospace',fontSize:6,color:'#f59e0b',padding:'2px 4px'}}>{currentMedia.name} · {playIdx+1}/{mediaQueue.length}</div>
         </div>
       )}
       <div ref={scrollRef} style={{height:200,overflowY:'auto',padding:'6px 8px',display:'flex',flexDirection:'column',gap:3}}>
         {lines.map((l,i)=>(
           <div key={i}>
-            <div style={{fontFamily:'"DM Mono",monospace',fontSize:7.5,
+            <div style={{fontFamily:'DM Mono,monospace',fontSize:7.5,
               color:l.t==='sys'?'#00e5a0':l.t==='user'?'#00b8ff':l.t==='img'?'#f59e0b':'#2a5a7a',
               fontWeight:l.t==='user'?600:400}}>{l.m}</div>
           </div>
@@ -1255,8 +1256,8 @@ function ChatTerminal({nickname}:{nickname:string}){
         <input ref={fileRef} type="file" accept="image/*,video/*" multiple onChange={handleFile} style={{display:'none'}}/>
         <button onClick={()=>fileRef.current?.click()} style={{background:'#0a1628',border:'none',borderRight:'1px solid #0a2535',padding:'6px 9px',color:'#f59e0b',cursor:'pointer',fontSize:12}}>📎</button>
         <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==='Enter'&&send()} placeholder="TYPE MESSAGE..."
-          style={{flex:1,background:'transparent',border:'none',padding:'6px 7px',fontFamily:'"DM Mono",monospace',fontSize:8,color:'#00b8ff',outline:'none'}}/>
-        <button onClick={send} style={{background:'#0a1628',border:'none',borderLeft:'1px solid #0a2535',padding:'6px 9px',color:'#2a5a7a',cursor:'pointer',fontFamily:'"DM Mono",monospace',fontSize:8}}>TX</button>
+          style={{flex:1,background:'transparent',border:'none',padding:'6px 7px',fontFamily:'DM Mono,monospace',fontSize:8,color:'#00b8ff',outline:'none'}}/>
+        <button onClick={send} style={{background:'#0a1628',border:'none',borderLeft:'1px solid #0a2535',padding:'6px 9px',color:'#2a5a7a',cursor:'pointer',fontFamily:'DM Mono,monospace',fontSize:8}}>TX</button>
       </div>
     </div>
   )
@@ -1271,24 +1272,24 @@ function GameStats({devices,calledNums,bankruptCount,liveBank,nickname,winStates
   return(
     <div style={{display:'flex',flexDirection:'column',gap:8}}>
       <div style={{background:'#020d1a',border:'1px solid #0a2535',borderRadius:12,padding:10}}>
-        <div style={{fontFamily:'"DM Mono",monospace',fontSize:7.5,color:'#2a5a7a',marginBottom:7}}>GAME STATS</div>
+        <div style={{fontFamily:'DM Mono,monospace',fontSize:7.5,color:'#2a5a7a',marginBottom:7}}>GAME STATS</div>
         {[['AGENT',nickname],['TARGET',BANKS[liveBank].name.split(' ')[0]],['DRAWN',`${calledNums.size}/90`],['DEVICES',`${devices.filter(d=>d.active).length}/${devices.length}`],['BANKRUPT',`${bankruptCount}/3`]].map(([k,v])=>(
           <div key={k} style={{display:'flex',justifyContent:'space-between',padding:'2px 0',borderBottom:'1px solid #0a1628'}}>
-            <span style={{fontFamily:'"DM Mono",monospace',fontSize:6.5,color:'#1e4a6a'}}>{k}</span>
-            <span style={{fontFamily:'"DM Mono",monospace',fontSize:7,color:'#4a7fa5',fontWeight:600}}>{v}</span>
+            <span style={{fontFamily:'DM Mono,monospace',fontSize:6.5,color:'#1e4a6a'}}>{k}</span>
+            <span style={{fontFamily:'DM Mono,monospace',fontSize:7,color:'#4a7fa5',fontWeight:600}}>{v}</span>
           </div>
         ))}
         {/* Contract address input for RNSM price feed */}
         <div style={{marginTop:7,paddingTop:6,borderTop:'1px solid #0a1628'}}>
-          <div style={{fontFamily:'"DM Mono",monospace',fontSize:6,color:'#1e4a6a',marginBottom:3}}>RNSM CONTRACT</div>
+          <div style={{fontFamily:'DM Mono,monospace',fontSize:6,color:'#1e4a6a',marginBottom:3}}>RNSM CONTRACT</div>
           <input value={contractAddr} onChange={e=>setContractAddr(e.target.value)}
             placeholder="0x... or token addr"
             style={{width:'100%',background:'#0a1628',border:`1px solid ${contractAddr?'#00e5a040':'#0a2535'}`,borderRadius:5,padding:'4px 6px',
-              fontFamily:'"DM Mono",monospace',fontSize:6.5,color:'#00e5a0',outline:'none',boxSizing:'border-box'}}/>
+              fontFamily:'DM Mono,monospace',fontSize:6.5,color:'#00e5a0',outline:'none',boxSizing:'border-box'}}/>
         </div>
       </div>
       <div style={{background:'#020d1a',border:'1px solid #0a2535',borderRadius:10,padding:10}}>
-        <div style={{fontFamily:'"DM Mono",monospace',fontSize:7.5,color:'#1e4a6a',marginBottom:7}}>WIN STATUS</div>
+        <div style={{fontFamily:'DM Mono,monospace',fontSize:7.5,color:'#1e4a6a',marginBottom:7}}>WIN STATUS</div>
         {LED_TYPES.map(type=><LedProgress key={type} type={type} ws={winStates[type]} devices={devices}/>)}
       </div>
     </div>
@@ -1302,13 +1303,13 @@ function NicknameModal({onConfirm}:{onConfirm:(name:string)=>void}){
   return(
     <div style={{position:'fixed',inset:0,background:'linear-gradient(135deg,#010810,#020d1a)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:1000,padding:16}}>
       <div style={{background:'#020d1a',border:'1px solid #0a3a5a',borderRadius:20,padding:32,maxWidth:340,width:'100%',boxShadow:'0 0 60px rgba(0,229,160,0.08)'}}>
-        <div style={{fontFamily:'"Syne",sans-serif',fontSize:28,fontWeight:800,color:'#00e5a0',textShadow:'0 0 20px #00e5a060',marginBottom:4}}>RANSOME</div>
-        <div style={{fontFamily:'"DM Mono",monospace',fontSize:9,color:'#2a5a7a',letterSpacing:'0.15em',marginBottom:24}}>HACK THE BANKS — CLAIM THE VAULT</div>
-        <div style={{fontFamily:'"DM Mono",monospace',fontSize:9,color:'#4a7fa5',marginBottom:8}}>CHOOSE YOUR AGENT NAME</div>
+        <div style={{fontFamily:'Syne,sans-serif',fontSize:28,fontWeight:800,color:'#00e5a0',textShadow:'0 0 20px #00e5a060',marginBottom:4}}>RANSOME</div>
+        <div style={{fontFamily:'DM Mono,monospace',fontSize:9,color:'#2a5a7a',letterSpacing:'0.15em',marginBottom:24}}>HACK THE BANKS — CLAIM THE VAULT</div>
+        <div style={{fontFamily:'DM Mono,monospace',fontSize:9,color:'#4a7fa5',marginBottom:8}}>CHOOSE YOUR AGENT NAME</div>
         <input value={name} onChange={e=>setName(e.target.value)} onKeyDown={e=>e.key==='Enter'&&go()} placeholder="e.g. GHOST_ZERO" maxLength={16}
-          style={{width:'100%',background:'#0a1628',border:'1px solid #1e3a5f',borderRadius:10,padding:'12px 14px',fontFamily:'"DM Mono",monospace',fontSize:14,color:'#00e5a0',outline:'none',boxSizing:'border-box',marginBottom:6,caretColor:'#00e5a0'}}/>
-        {err&&<div style={{fontFamily:'"DM Mono",monospace',fontSize:8,color:'#ef4444',marginBottom:8}}>{err}</div>}
-        <button onClick={go} style={{width:'100%',background:'linear-gradient(135deg,#00e5a0,#00b8ff)',color:'#000',border:'none',borderRadius:10,padding:'14px',fontFamily:'"Syne",sans-serif',fontSize:15,fontWeight:700,cursor:'pointer',marginTop:6}}>ENTER THE MATRIX →</button>
+          style={{width:'100%',background:'#0a1628',border:'1px solid #1e3a5f',borderRadius:10,padding:'12px 14px',fontFamily:'DM Mono,monospace',fontSize:14,color:'#00e5a0',outline:'none',boxSizing:'border-box',marginBottom:6,caretColor:'#00e5a0'}}/>
+        {err&&<div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#ef4444',marginBottom:8}}>{err}</div>}
+        <button onClick={go} style={{width:'100%',background:'linear-gradient(135deg,#00e5a0,#00b8ff)',color:'#000',border:'none',borderRadius:10,padding:'14px',fontFamily:'Syne,sans-serif',fontSize:15,fontWeight:700,cursor:'pointer',marginTop:6}}>ENTER THE MATRIX →</button>
       </div>
     </div>
   )
@@ -1344,9 +1345,9 @@ function MaximizedDevices({devices,currentNum,clickWindowOpen,calledNums,onCellC
       {/* Header */}
       <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'6px 12px',borderBottom:'1px solid #0a1f3a',background:'rgba(2,13,26,0.98)',flexShrink:0}}>
         <div style={{display:'flex',alignItems:'center',gap:8}}>
-          <span style={{fontFamily:'"DM Mono",monospace',fontSize:8,color:'#1e4a6a'}}>◈ DEVICES</span>
-          <span style={{fontFamily:'"DM Mono",monospace',fontSize:8,color:'#2a5a7a'}}>{devices.filter(d=>d.active).length}/{devices.length} active</span>
-          {total>1&&<span style={{fontFamily:'"DM Mono",monospace',fontSize:7.5,color:'#1e3a5f'}}>pg {page+1}/{total}</span>}
+          <span style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#1e4a6a'}}>◈ DEVICES</span>
+          <span style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#2a5a7a'}}>{devices.filter(d=>d.active).length}/{devices.length} active</span>
+          {total>1&&<span style={{fontFamily:'DM Mono,monospace',fontSize:7.5,color:'#1e3a5f'}}>pg {page+1}/{total}</span>}
         </div>
         <div style={{display:'flex',gap:4,alignItems:'center'}}>
           {total>1&&Array.from({length:total},(_,i)=>(
@@ -1354,10 +1355,10 @@ function MaximizedDevices({devices,currentNum,clickWindowOpen,calledNums,onCellC
               background:i===page?'#00e5a0':'#1e3a5f',boxShadow:i===page?'0 0 5px #00e5a0':'none'}}/>
           ))}
           <button onClick={()=>setPage(p=>Math.max(0,p-1))} disabled={page===0}
-            style={{width:24,height:24,borderRadius:6,background:'#0a1628',border:'1px solid #1e3a5f',color:page===0?'#1e3a5f':'#4a7fa5',cursor:page===0?'default':'pointer',fontFamily:'"DM Mono",monospace',fontSize:13,display:'flex',alignItems:'center',justifyContent:'center'}}>‹</button>
+            style={{width:24,height:24,borderRadius:6,background:'#0a1628',border:'1px solid #1e3a5f',color:page===0?'#1e3a5f':'#4a7fa5',cursor:page===0?'default':'pointer',fontFamily:'DM Mono,monospace',fontSize:13,display:'flex',alignItems:'center',justifyContent:'center'}}>‹</button>
           <button onClick={()=>setPage(p=>Math.min(total-1,p+1))} disabled={page>=total-1}
-            style={{width:24,height:24,borderRadius:6,background:'#0a1628',border:'1px solid #1e3a5f',color:page>=total-1?'#1e3a5f':'#4a7fa5',cursor:page>=total-1?'default':'pointer',fontFamily:'"DM Mono",monospace',fontSize:13,display:'flex',alignItems:'center',justifyContent:'center'}}>›</button>
-          <button onClick={onClose} style={{background:'#0a1628',border:'1px solid #1e3a5f',color:'#4a7fa5',borderRadius:7,padding:'4px 10px',fontFamily:'"DM Mono",monospace',fontSize:8,cursor:'pointer'}}>⊟ EXIT</button>
+            style={{width:24,height:24,borderRadius:6,background:'#0a1628',border:'1px solid #1e3a5f',color:page>=total-1?'#1e3a5f':'#4a7fa5',cursor:page>=total-1?'default':'pointer',fontFamily:'DM Mono,monospace',fontSize:13,display:'flex',alignItems:'center',justifyContent:'center'}}>›</button>
+          <button onClick={onClose} style={{background:'#0a1628',border:'1px solid #1e3a5f',color:'#4a7fa5',borderRadius:7,padding:'4px 10px',fontFamily:'DM Mono,monospace',fontSize:8,cursor:'pointer'}}>⊟ EXIT</button>
         </div>
       </div>
       {/* 2-col grid, 6 devices per page, scrollable */}
@@ -1371,7 +1372,7 @@ function MaximizedDevices({devices,currentNum,clickWindowOpen,calledNums,onCellC
         </div>
       </div>
       {total>1&&(
-        <div style={{textAlign:'center',padding:'5px',fontFamily:'"DM Mono",monospace',fontSize:6.5,color:'rgba(30,58,95,0.7)',flexShrink:0}}>
+        <div style={{textAlign:'center',padding:'5px',fontFamily:'DM Mono,monospace',fontSize:6.5,color:'rgba(30,58,95,0.7)',flexShrink:0}}>
           ← SWIPE OR USE ARROWS TO NAVIGATE ·  6 DEVICES PER PAGE →
         </div>
       )}
@@ -1973,314 +1974,189 @@ function Ransome(){
 
   // ── LOBBY ─────────────────────────────────────────────────────────────────
   if(phase==='lobby')return(
-    <div style={{minHeight:'100vh',background:'#050f17',color:'#dce6f3',fontFamily:'"DM Mono",monospace',overflow:'hidden'}}>
-
-      {/* ── TOP BAR ──────────────────────────────────────────────────── */}
-      <header style={{position:'fixed',top:0,left:0,width:'100%',zIndex:50,display:'flex',justifyContent:'space-between',alignItems:'center',padding:'0 24px',height:56,background:'rgba(5,10,23,0.85)',backdropFilter:'blur(12px)',borderBottom:'1px solid rgba(0,229,160,0.1)',boxSizing:'border-box'}}>
-        <div style={{display:'flex',alignItems:'center',gap:24}}>
-          <div>
-            <span style={{fontFamily:'"Syne",sans-serif',fontSize:20,fontWeight:800,color:'#00e5a0',textShadow:'0 0 12px rgba(0,229,160,0.4)'}}>RANSOME</span>
-          </div>
-          <div style={{display:'flex',gap:20}}>
-            <span style={{fontSize:10,color:'#00e5a0',borderBottom:'2px solid #00e5a0',paddingBottom:2,letterSpacing:'0.12em',textTransform:'uppercase'}}>NETWORK: ONLINE</span>
-            <span style={{fontSize:10,color:'rgba(0,229,160,0.4)',letterSpacing:'0.1em',textTransform:'uppercase'}}>ENCRYPTION: AES-256</span>
-            <span style={{fontSize:10,color:'rgba(0,229,160,0.4)',letterSpacing:'0.1em',textTransform:'uppercase'}}>LOGS: ACTIVE</span>
-          </div>
+    <div style={{minHeight:'100vh',background:'linear-gradient(180deg,#010810,#020d1a)',color:'#c8d8e8',padding:'16px 14px',boxSizing:'border-box'}}>
+      {/* Header */}
+      <div style={{display:'flex',alignItems:'center',marginBottom:16,gap:10}}>
+        <div style={{flexShrink:0}}>
+          <div style={{fontFamily:'Syne,sans-serif',fontSize:clamp(22,4,'vw'),fontWeight:800,color:'#00e5a0',textShadow:'0 0 20px #00e5a060'}}>RANSOME</div>
+          <div style={{fontFamily:'DM Mono,monospace',fontSize:'clamp(7px,1.8vw,9px)',color:'#2a5a7a',letterSpacing:'0.15em'}}>HACK THE BANKS</div>
         </div>
-        <div style={{display:'flex',alignItems:'center',gap:16}}>
-          <div style={{display:'flex',alignItems:'center',gap:6,background:'rgba(24,39,51,0.5)',padding:'4px 12px',border:'1px solid rgba(47,243,173,0.2)'}}>
-            <span style={{fontSize:10,color:'#00e5a0'}}>⏱</span>
-            <span style={{fontSize:12,color:'#00e5a0',fontWeight:700}}>{fmtTime(lobbyCountdown)}</span>
-          </div>
-          <div style={{fontSize:10,color:'#4a7fa5',background:'#0a1628',border:'1px solid #1e3a5f',borderRadius:6,padding:'5px 10px'}}>👤 {nickname}</div>
+        <div style={{flex:1,height:40,background:'rgba(0,229,160,0.02)',border:'1px dashed #0a2535',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center',margin:'0 8px'}}>
+          <span style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#0a2535'}}>AD SPACE</span>
+        </div>
+        <div style={{display:'flex',gap:6,alignItems:'center',flexShrink:0}}>
+          <div style={{fontFamily:'DM Mono,monospace',fontSize:'clamp(7px,1.8vw,9px)',color:'#4a7fa5',background:'#0a1628',border:'1px solid #1e3a5f',borderRadius:8,padding:'5px 8px'}}>👤 {nickname}</div>
           {wallet?(
-            <div style={{display:'flex',alignItems:'center',gap:6}}>
-              <div style={{background:'#0a1628',border:'1px solid rgba(0,229,160,0.25)',borderRadius:6,padding:'5px 10px',fontSize:9,color:'#00e5a0',display:'flex',alignItems:'center',gap:5}}>
-                <div style={{width:5,height:5,borderRadius:'50%',background:'#22c55e'}}/>{wallet.slice(0,6)}…{wallet.slice(-4)}
+            <div style={{display:'flex',alignItems:'center',gap:4}}>
+              <div style={{background:'#0a1628',border:'1px solid #00e5a040',borderRadius:8,padding:'5px 9px',fontFamily:'DM Mono,monospace',fontSize:'clamp(7px,1.6vw,9px)',color:'#00e5a0',display:'flex',alignItems:'center',gap:5}}>
+                <div style={{width:5,height:5,borderRadius:'50%',background:'#22c55e',flexShrink:0}}/>
+                {wallet}
               </div>
-              <button onClick={()=>disconnect()} style={{background:'rgba(239,68,68,0.08)',border:'1px solid rgba(239,68,68,0.25)',borderRadius:6,padding:'5px 8px',fontSize:9,color:'#ef4444',cursor:'pointer'}}>✕</button>
+              <button onClick={()=>disconnect()} style={{background:'rgba(239,68,68,0.08)',border:'1px solid rgba(239,68,68,0.25)',borderRadius:8,padding:'5px 8px',fontFamily:'DM Mono,monospace',fontSize:'clamp(7px,1.6vw,8px)',color:'#ef4444',cursor:'pointer',whiteSpace:'nowrap'}}>
+                ✕ DISCONNECT
+              </button>
             </div>
           ):(
-            <WalletMultiButton style={{background:'linear-gradient(135deg,#00e5a0,#00b8ff)',color:'#000',borderRadius:6,fontFamily:'"DM Mono",monospace',fontSize:10,fontWeight:700,height:'auto',padding:'6px 14px'}}/>
+            <WalletMultiButton style={{background:'linear-gradient(135deg,#00e5a0,#00b8ff)',color:'#000',borderRadius:8,fontFamily:'DM Mono,monospace',fontSize:'clamp(8px,1.8vw,10px)',fontWeight:700,height:'auto',padding:'6px 12px'}}/>
           )}
         </div>
-      </header>
+      </div>
 
-      {/* ── SIDE NAV ─────────────────────────────────────────────────── */}
-      <nav style={{position:'fixed',left:0,top:56,height:'calc(100vh - 56px)',width:220,zIndex:40,display:'flex',flexDirection:'column',paddingTop:24,background:'#09141e',borderRight:'1px solid rgba(0,229,160,0.08)',boxSizing:'border-box'}}>
-        <div style={{padding:'0 20px 24px'}}>
-          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:8}}>
-            <div style={{width:36,height:36,background:'#13212c',border:'1px solid rgba(0,229,160,0.2)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:16}}>🎭</div>
-            <div>
-              <div style={{color:'#00e5a0',fontWeight:700,fontSize:10}}>RANK: OPERATIVE</div>
-              <div style={{color:'#4a6a7a',fontSize:9}}>{nickname.toUpperCase()}</div>
-            </div>
+      {/* Live bank pill */}
+      <div style={{background:'rgba(239,68,68,0.08)',border:'1px solid rgba(239,68,68,0.2)',borderRadius:12,padding:'10px 14px',marginBottom:14,display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:8}}>
+        <div>
+          <div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#ef4444',letterSpacing:'0.12em',marginBottom:2}}>🔴 LIVE NOW</div>
+          <div style={{fontFamily:'Syne,sans-serif',fontSize:'clamp(14px,4vw,20px)',fontWeight:800,color:'#fff'}}>{BANKS[liveBank].name}</div>
+          <div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#2a5a7a'}}>{BANKS[liveBank].city} · {BANKS[liveBank].vault}</div>
+        </div>
+        <div style={{textAlign:'right'}}>
+          <div style={{fontFamily:'Syne,sans-serif',fontSize:'clamp(16px,4vw,22px)',fontWeight:800,color:'#00e5a0'}}>$1,000,000</div>
+          <div style={{fontFamily:'DM Mono,monospace',fontSize:9,color:lobbyCountdown<=60?'#ef4444':'#2a5a7a',fontWeight:700}}>
+            {lobbyCountdown<=60?'🚀 LAUNCHING NOW':`NEXT BATCH: ${fmtTime(lobbyCountdown)}`}
           </div>
         </div>
-        {[
-          {icon:'🎯',label:'OPERATIVE',active:true},
-          {icon:'📋',label:'MISSIONS',active:false},
-          {icon:'🌐',label:'NETWORK',active:false},
-        ].map(item=>(
-          <div key={item.label} style={{display:'flex',alignItems:'center',gap:10,padding:'12px 20px',cursor:'pointer',
-            color:item.active?'#00e5a0':'#4a6a7a',fontWeight:item.active?700:400,fontSize:11,
-            borderRight:item.active?'2px solid #00e5a0':'2px solid transparent',
-            background:item.active?'linear-gradient(to left,rgba(0,229,160,0.08),transparent)':'transparent'}}>
-            <span>{item.icon}</span><span>{item.label}</span>
+      </div>
+
+      {/* Main layout: 3-col on wide, stacked on mobile */}
+      <div style={{display:'grid',gridTemplateColumns:'minmax(0,1fr) minmax(0,200px) minmax(0,300px)',gap:14,marginBottom:14,alignItems:'start'}} className="lobby-grid">
+        {/* Col 1: World map */}
+        <div>
+          <div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#1e4a6a',letterSpacing:'0.1em',marginBottom:6}}>⬡ GLOBAL BANK NETWORK — 23 BANKS · 59 MIN CYCLES</div>
+          <WorldMapSketch currentHour={currentHour} onSelectBank={setSelectedBank}/>
+          {selectedBank!==null&&(
+            <div style={{marginTop:8,background:'#020d1a',border:'1px solid #0a2535',borderRadius:8,padding:'8px 12px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+              <div>
+                <div style={{fontFamily:'DM Mono,monospace',fontSize:9,color:'#00e5a0',fontWeight:700}}>{BANKS[selectedBank].name}</div>
+                <div style={{fontFamily:'DM Mono,monospace',fontSize:7.5,color:'#2a5a7a'}}>{BANKS[selectedBank].city} · {BANKS[selectedBank].region} · {BANKS[selectedBank].vault}</div>
+              </div>
+              <div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:selectedBank===liveBank?'#22c55e':'#1e4a6a'}}>{selectedBank===liveBank?'🟢 LIVE':`UTC${BANKS[selectedBank].tz>=0?'+':''}${BANKS[selectedBank].tz}`}</div>
+            </div>
+          )}
+        </div>
+
+        {/* Col 2: LOBBY VAULT — accumulating ransom funds */}
+        <div style={{background:'#020d1a',border:'2px solid #0a3a5a',borderRadius:14,padding:'12px 10px',display:'flex',flexDirection:'column',gap:8,alignItems:'center'}}>
+          <div style={{fontFamily:'DM Mono,monospace',fontSize:7,color:'#2a5a7a',letterSpacing:'0.12em',textAlign:'center'}}>
+            🏦 NEXT VAULT
           </div>
-        ))}
-        <div style={{marginTop:'auto',padding:'0 14px 20px'}}>
-          {lobbyCountdown<=60&&devices.length>0?(
-            <button onClick={enterGame} style={{width:'100%',padding:'10px 0',background:'linear-gradient(135deg,#ef4444,#dc2626)',color:'#fff',border:'none',fontSize:10,fontWeight:700,cursor:'pointer',letterSpacing:'0.1em',boxShadow:'0 0 16px rgba(239,68,68,0.3)',animation:'ledBlink 0.6s infinite'}}>
+          {/* Vault fill indicator */}
+          <div style={{position:'relative',width:'100%'}}>
+            <VaultSketch pct={lobbyFill} paid={Math.round(lobbyFill*1000000)}/>
+          </div>
+          {/* Accumulation bar */}
+          <div style={{width:'100%',background:'#0a1628',borderRadius:3,overflow:'hidden',height:6,border:'1px solid #0d2035'}}>
+            <div style={{height:'100%',width:`${lobbyFill*100}%`,
+              background:`linear-gradient(90deg,#00e5a0,${lobbyFill>0.8?'#ef4444':'#00b8ff'})`,
+              borderRadius:3,transition:'width 1s linear',
+              boxShadow:`0 0 ${Math.round(lobbyFill*12)}px rgba(0,229,160,${(lobbyFill*0.7).toFixed(2)})`}}/>
+          </div>
+          {/* Vault amount accumulating */}
+          <div style={{textAlign:'center'}}>
+            <div style={{fontFamily:'Syne,sans-serif',fontSize:18,fontWeight:800,
+              color:lobbyFill>0.8?'#ef4444':'#00e5a0',
+              textShadow:`0 0 16px ${lobbyFill>0.8?'#ef4444':'#00e5a0'}60`}}>
+              ${Math.round(lobbyFill*1000000).toLocaleString()}
+            </div>
+            <div style={{fontFamily:'DM Mono,monospace',fontSize:6,color:'#1e4a6a',marginTop:1}}>
+              ACCUMULATING
+            </div>
+          </div>
+          {/* Countdown to next batch */}
+          <div style={{width:'100%',background:'rgba(0,0,0,0.3)',borderRadius:8,padding:'6px 10px',textAlign:'center',
+            border:`1px solid ${lobbyCountdown<=60?'rgba(239,68,68,0.4)':'rgba(10,58,90,0.8)'}`,
+            animation:lobbyCountdown<=60?'ledBlink 0.8s infinite':'none'}}>
+            <div style={{fontFamily:'DM Mono,monospace',fontSize:7,color:lobbyCountdown<=60?'#ef4444':'#2a5a7a',marginBottom:2}}>
+              {lobbyCountdown<=60?'🚀 BATCH LAUNCHING':'⏳ NEXT BATCH'}
+            </div>
+            <div style={{fontFamily:'Syne,sans-serif',fontSize:22,fontWeight:800,
+              color:lobbyCountdown<=60?'#ef4444':'#fff',
+              textShadow:lobbyCountdown<=60?'0 0 20px #ef4444':'none'}}>
+              {fmtTime(lobbyCountdown)}
+            </div>
+          </div>
+          {/* Device count */}
+          <div style={{fontFamily:'DM Mono,monospace',fontSize:6.5,color:'#1e4a6a',textAlign:'center'}}>
+            {devices.length>0?(
+              <span style={{color:'#00e5a0'}}>⚡ {devices.length} DEVICE{devices.length>1?'S':''} READY</span>
+            ):(
+              <span>MINT DEVICES TO JOIN →</span>
+            )}
+          </div>
+          {/* Enter game button — only in final 60s window */}
+          {lobbyCountdown<=60&&devices.length>0&&(
+            <button onClick={enterGame} style={{
+              width:'100%',background:'linear-gradient(135deg,#ef4444,#dc2626)',
+              color:'#fff',border:'none',borderRadius:8,padding:'7px 0',
+              fontFamily:'DM Mono,monospace',fontSize:8,fontWeight:700,cursor:'pointer',
+              boxShadow:'0 0 16px rgba(239,68,68,0.4)',animation:'ledBlink 0.6s infinite'}}>
               🚀 ENTER HACK MATRIX
             </button>
-          ):(
-            <button onClick={()=>{}} style={{width:'100%',padding:'10px 0',background:'rgba(0,229,160,0.08)',border:'1px solid rgba(0,229,160,0.25)',color:'#00e5a0',fontSize:10,fontWeight:700,cursor:'default',letterSpacing:'0.1em'}}>
-              INITIALIZE_HEIST
-            </button>
+          )}
+          {lobbyCountdown>60&&devices.length>0&&(
+            <div style={{fontFamily:'DM Mono,monospace',fontSize:6,color:'#1e4a6a',textAlign:'center'}}>
+              Entry opens in {fmtTime(lobbyCountdown-60)}
+            </div>
           )}
         </div>
-        <div style={{borderTop:'1px solid rgba(0,229,160,0.05)',padding:'8px 0'}}>
-          <div style={{display:'flex',alignItems:'center',gap:8,padding:'6px 20px',color:'#4a6a7a',fontSize:9}}>🔒 SECURITY</div>
-          <div style={{display:'flex',alignItems:'center',gap:8,padding:'6px 20px',color:'#4a6a7a',fontSize:9}}>🔐 DECRYPT</div>
+
+        {/* Col 3: Device skeleton with Mint/Demo/Rules */}
+        <DeviceSkeleton title="RNSM-MINT-01">
+          <MintPanel wallet={wallet} devices={devices} mintCount={mintCount} mintToken={mintToken}
+            setMintCount={setMintCount} setMintToken={setMintToken}
+            onMint={mintDevices} onEnterGame={enterGame} onConnectWallet={()=>{}}/>
+        </DeviceSkeleton>
+      </div>
+
+      {/* Lobby chat — shared with all users */}
+      <div style={{marginBottom:14}}>
+        <div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#1e4a6a',letterSpacing:'0.1em',marginBottom:6}}>
+          💬 LOBBY CHAT — visible to all agents
         </div>
-      </nav>
+        <ChatTerminal nickname={nickname}/>
+      </div>
 
-      {/* ── MAIN CANVAS ──────────────────────────────────────────────── */}
-      <main style={{marginLeft:220,paddingTop:56,minHeight:'100vh',background:'#050f17',position:'relative',boxSizing:'border-box'}}>
-        {/* Scanline overlay */}
-        <div style={{position:'absolute',inset:0,backgroundImage:'linear-gradient(to bottom,rgba(47,243,173,0.03) 50%,rgba(0,0,0,0) 50%)',backgroundSize:'100% 4px',pointerEvents:'none',zIndex:1}}/>
-        <div style={{position:'absolute',inset:0,background:'radial-gradient(circle at 50% 50%,rgba(0,182,253,0.03),transparent 70%)',zIndex:0,pointerEvents:'none'}}/>
-
-        <div style={{position:'relative',zIndex:2,padding:24,display:'grid',gridTemplateColumns:'1fr 340px',gap:20,alignItems:'start'}}>
-
-          {/* ── LEFT COL ──────────────────────────────────────────────── */}
-          <div style={{display:'flex',flexDirection:'column',gap:20}}>
-
-            {/* Live bank banner */}
-            <div style={{background:'rgba(239,68,68,0.06)',border:'1px solid rgba(239,68,68,0.2)',padding:'10px 16px',display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:8}}>
-              <div>
-                <div style={{fontSize:8,color:'#ef4444',letterSpacing:'0.12em',marginBottom:2}}>🔴 LIVE NOW</div>
-                <div style={{fontFamily:'"Syne",sans-serif',fontSize:22,fontWeight:800,color:'#fff'}}>{BANKS[liveBank].name}</div>
-                <div style={{fontSize:8,color:'#2a5a7a'}}>{BANKS[liveBank].city} · {BANKS[liveBank].vault}</div>
-              </div>
-              <div style={{textAlign:'right'}}>
-                <div style={{fontFamily:'"Syne",sans-serif',fontSize:24,fontWeight:800,color:'#00e5a0'}}>$1,000,000</div>
-                <div style={{fontSize:9,color:lobbyCountdown<=60?'#ef4444':'#2a5a7a',fontWeight:700}}>
-                  {lobbyCountdown<=60?'🚀 LAUNCHING NOW':`NEXT BATCH: ${fmtTime(lobbyCountdown)}`}
-                </div>
-              </div>
-            </div>
-
-            {/* World map */}
-            <div style={{position:'relative',background:'#09141e',border:'1px solid rgba(63,73,83,0.3)',overflow:'hidden'}}>
-              {/* Corner brackets */}
-              <div style={{position:'absolute',top:0,left:0,width:14,height:14,borderTop:'2px solid',borderLeft:'2px solid',borderColor:'rgba(0,229,160,0.4)',opacity:0.7,zIndex:3}}/>
-              <div style={{position:'absolute',top:0,right:0,width:14,height:14,borderTop:'2px solid',borderRight:'2px solid',borderColor:'rgba(0,229,160,0.4)',opacity:0.7,zIndex:3}}/>
-              <div style={{position:'absolute',bottom:0,left:0,width:14,height:14,borderBottom:'2px solid',borderLeft:'2px solid',borderColor:'rgba(0,229,160,0.4)',opacity:0.7,zIndex:3}}/>
-              <div style={{position:'absolute',bottom:0,right:0,width:14,height:14,borderBottom:'2px solid',borderRight:'2px solid',borderColor:'rgba(0,229,160,0.4)',opacity:0.7,zIndex:3}}/>
-              <div style={{position:'absolute',top:12,left:16,zIndex:4,display:'flex',gap:10,alignItems:'center'}}>
-                <div style={{background:'rgba(47,243,173,0.15)',color:'#00e5a0',padding:'2px 8px',fontSize:9,fontWeight:700,letterSpacing:'0.1em'}}>LIVE_MAP_FEED</div>
-                <span style={{fontSize:9,color:'#4a6a7a'}}>TARGET: {BANKS[liveBank].name.toUpperCase()}</span>
-              </div>
-              <WorldMapSketch currentHour={currentHour} onSelectBank={setSelectedBank}/>
-              <div style={{position:'absolute',bottom:12,right:16,textAlign:'right',zIndex:4}}>
-                <div style={{fontSize:9,color:'#4a6a7a'}}>BREACH_PROBABILITY: 88.4%</div>
-              </div>
-            </div>
-
-            {/* Selected bank info */}
-            {selectedBank!==null&&(
-              <div style={{background:'#09141e',border:'1px solid #0a2535',padding:'8px 14px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-                <div>
-                  <div style={{fontSize:10,color:'#00e5a0',fontWeight:700}}>{BANKS[selectedBank].name}</div>
-                  <div style={{fontSize:8,color:'#2a5a7a'}}>{BANKS[selectedBank].city} · {BANKS[selectedBank].region} · {BANKS[selectedBank].vault}</div>
-                </div>
-                <div style={{fontSize:9,color:selectedBank===liveBank?'#22c55e':'#1e4a6a'}}>{selectedBank===liveBank?'🟢 LIVE':`UTC${BANKS[selectedBank].tz>=0?'+':''}${BANKS[selectedBank].tz}`}</div>
-              </div>
-            )}
-
-            {/* MINT_TERMINAL */}
-            <div style={{background:'#0e1b25',border:'1px solid rgba(63,73,83,0.2)',padding:20}}>
-              <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:16}}>
-                <div style={{display:'flex',alignItems:'center',gap:10}}>
-                  <span style={{fontSize:16}}>💻</span>
-                  <span style={{fontFamily:'"Syne",sans-serif',fontSize:15,fontWeight:700,color:'#dce6f3',letterSpacing:'0.08em'}}>MINT_TERMINAL</span>
-                </div>
-                <span style={{fontSize:9,color:'#4a6a7a'}}>V-TYPE_FABRICATOR_READY</span>
-              </div>
-              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:14,alignItems:'end'}}>
-                <div>
-                  <div style={{fontSize:9,color:'#4a6a7a',marginBottom:6,textTransform:'uppercase',letterSpacing:'0.1em'}}>QUANTITY</div>
-                  <div style={{display:'flex',gap:6}}>
-                    {[1,3,5,10].map(n=>(
-                      <button key={n} onClick={()=>setMintCount(n)} style={{flex:1,padding:'8px 0',background:mintCount===n?'rgba(0,229,160,0.15)':'rgba(0,0,0,0.3)',border:`1px solid ${mintCount===n?'rgba(0,229,160,0.5)':'rgba(63,73,83,0.3)'}`,color:mintCount===n?'#00e5a0':'#4a6a7a',fontSize:10,fontWeight:700,cursor:'pointer'}}>
-                        {n}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <div style={{fontSize:9,color:'#4a6a7a',marginBottom:6,textTransform:'uppercase',letterSpacing:'0.1em'}}>TOKEN</div>
-                  <div style={{display:'flex',gap:4}}>
-                    {['SOL','USDT','RNSM'].map(t=>(
-                      <button key={t} onClick={()=>setMintToken(t)} style={{flex:1,padding:'8px 4px',background:mintToken===t?'rgba(0,229,160,0.15)':'rgba(0,0,0,0.3)',border:`1px solid ${mintToken===t?'rgba(0,229,160,0.5)':'rgba(63,73,83,0.3)'}`,color:mintToken===t?'#00e5a0':'#4a6a7a',fontSize:9,fontWeight:700,cursor:'pointer'}}>
-                        {t}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  {wallet?(
-                    <button onClick={mintDevices} style={{width:'100%',padding:'10px 0',background:'linear-gradient(135deg,#00e5a0,#00b8ff)',color:'#000',border:'none',fontFamily:'"DM Mono",monospace',fontSize:11,fontWeight:700,cursor:'pointer',letterSpacing:'0.08em',boxShadow:'0 0 16px rgba(47,243,173,0.25)'}}>
-                      INITIALIZE_DEVICE →
-                    </button>
-                  ):(
-                    <WalletMultiButton style={{width:'100%',background:'linear-gradient(135deg,#00e5a0,#00b8ff)',color:'#000',borderRadius:0,fontFamily:'"DM Mono",monospace',fontSize:11,fontWeight:700,height:'auto',padding:'10px 0'}}/>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Lobby chat */}
-            <div>
-              <div style={{fontSize:8,color:'#1e4a6a',letterSpacing:'0.1em',marginBottom:8,textTransform:'uppercase'}}>💬 LOBBY CHAT — VISIBLE TO ALL AGENTS</div>
-              <ChatTerminal nickname={nickname}/>
-            </div>
-
-          </div>
-
-          {/* ── RIGHT COL: VAULT STATUS ─────────────────────────────── */}
-          <aside style={{background:'#09141e',border:'1px solid rgba(63,73,83,0.2)',padding:20,display:'flex',flexDirection:'column',gap:16,position:'relative'}}>
-            <div style={{position:'absolute',top:0,left:0,width:14,height:14,borderTop:'2px solid',borderLeft:'2px solid',borderColor:'rgba(0,229,160,0.3)'}}/>
-            <div style={{position:'absolute',top:0,right:0,width:14,height:14,borderTop:'2px solid',borderRight:'2px solid',borderColor:'rgba(0,229,160,0.3)'}}/>
-            <div style={{display:'flex',alignItems:'center',gap:10}}>
-              <span style={{fontSize:16}}>💎</span>
-              <span style={{fontFamily:'"Syne",sans-serif',fontSize:15,fontWeight:700,color:'#dce6f3',letterSpacing:'0.08em'}}>VAULT_STATUS</span>
-            </div>
-
-            {/* Liquid vault */}
-            <div style={{position:'relative',background:'#050f17',border:'1px solid rgba(63,73,83,0.15)',overflow:'hidden',minHeight:220,display:'flex',alignItems:'center',justifyContent:'center'}}>
-              <div style={{position:'absolute',bottom:0,left:0,width:'100%',height:`${lobbyFill*100}%`,background:'linear-gradient(180deg,#2ff3ad,#00658e)',opacity:0.25,transition:'height 1s linear',WebkitMaskImage:'radial-gradient(circle at 50% -20%,black 50%,transparent 100%)'}}/>
-              <VaultSketch pct={lobbyFill} paid={Math.round(lobbyFill*1000000)}/>
-              <div style={{position:'absolute',bottom:8,width:'100%',textAlign:'center'}}>
-                <div style={{fontSize:9,color:'#4a6a7a',textTransform:'uppercase',letterSpacing:'0.1em'}}>Global Liquid Assets</div>
-                <div style={{fontFamily:'"Syne",sans-serif',fontSize:28,fontWeight:800,color:'#dce6f3',letterSpacing:'-0.02em'}}>
-                  ${Math.round(lobbyFill*1000000).toLocaleString()}
-                </div>
-              </div>
-            </div>
-
-            {/* Stats */}
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
-              <div style={{textAlign:'center',padding:'8px 0'}}>
-                <div style={{fontSize:9,color:'#4a6a7a',textTransform:'uppercase'}}>Operatives</div>
-                <div style={{fontFamily:'"Syne",sans-serif',fontSize:20,fontWeight:700,color:'#00e5a0'}}>2,104</div>
-              </div>
-              <div style={{textAlign:'center',padding:'8px 0'}}>
-                <div style={{fontSize:9,color:'#4a6a7a',textTransform:'uppercase'}}>Success Rate</div>
-                <div style={{fontFamily:'"Syne",sans-serif',fontSize:20,fontWeight:700,color:'#00b6fd'}}>92.4%</div>
-              </div>
-            </div>
-
-            {/* Status rows */}
-            {[
-              {label:'LAST BREACH',val:`+${devices.length>0?'450.2':'0'} SOL`,color:'#00e5a0'},
-              {label:'NODE STABILITY',val:'OPTIMAL',color:'#00b6fd'},
-              {label:'THREAT LEVEL',val:'LOW',color:'#ff6daf'},
-            ].map(row=>(
-              <div key={row.label} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 10px',background:'#13212c',borderLeft:`2px solid ${row.color}`}}>
-                <span style={{fontSize:9,color:'#4a6a7a',textTransform:'uppercase'}}>{row.label}</span>
-                <span style={{fontSize:10,color:row.color,fontWeight:700}}>{row.val}</span>
-              </div>
-            ))}
-
-            {/* Countdown */}
-            <div style={{textAlign:'center',padding:'10px',background:'rgba(0,0,0,0.3)',border:`1px solid ${lobbyCountdown<=60?'rgba(239,68,68,0.4)':'rgba(10,58,90,0.6)'}`,animation:lobbyCountdown<=60?'ledBlink 0.8s infinite':'none'}}>
-              <div style={{fontSize:8,color:lobbyCountdown<=60?'#ef4444':'#2a5a7a',marginBottom:4}}>
-                {lobbyCountdown<=60?'🚀 BATCH LAUNCHING':'⏳ NEXT BATCH'}
-              </div>
-              <div style={{fontFamily:'"Syne",sans-serif',fontSize:26,fontWeight:800,color:lobbyCountdown<=60?'#ef4444':'#fff',textShadow:lobbyCountdown<=60?'0 0 20px #ef4444':'none'}}>
-                {fmtTime(lobbyCountdown)}
-              </div>
-            </div>
-
-            {/* Devices */}
-            <div style={{textAlign:'center',fontSize:9,color:'#1e4a6a'}}>
-              {devices.length>0?(
-                <span style={{color:'#00e5a0'}}>⚡ {devices.length} DEVICE{devices.length>1?'S':''} READY</span>
-              ):(
-                <span>MINT DEVICES IN TERMINAL →</span>
-              )}
-            </div>
-
-            {lobbyCountdown<=60&&devices.length>0&&(
-              <button onClick={enterGame} style={{width:'100%',padding:'10px 0',background:'linear-gradient(135deg,#ef4444,#dc2626)',color:'#fff',border:'none',fontSize:11,fontWeight:700,cursor:'pointer',letterSpacing:'0.1em',boxShadow:'0 0 16px rgba(239,68,68,0.4)',animation:'ledBlink 0.6s infinite'}}>
-                🚀 ENTER HACK MATRIX
-              </button>
-            )}
-            {lobbyCountdown>60&&devices.length>0&&(
-              <div style={{textAlign:'center',fontSize:9,color:'#1e4a6a'}}>Entry opens in {fmtTime(lobbyCountdown-60)}</div>
-            )}
-          </aside>
-
-        </div>
-      </main>
-
-      {/* ── FOOTER STATUS BAR ────────────────────────────────────────── */}
-      <footer style={{position:'fixed',bottom:0,left:0,width:'100%',zIndex:50,display:'flex',justifyContent:'space-between',alignItems:'center',padding:'0 16px',height:32,background:'#000',borderTop:'1px solid rgba(0,229,160,0.15)',boxSizing:'border-box'}}>
-        <div style={{display:'flex',alignItems:'center',gap:20}}>
-          <span style={{fontSize:9,color:'rgba(0,229,160,0.6)',textTransform:'uppercase',letterSpacing:'0.1em'}}>SYSTEM_BREACH_LOGS: v2.4.0-STABLE</span>
-          <span style={{fontSize:9,color:'rgba(0,229,160,0.9)',textTransform:'uppercase',letterSpacing:'0.1em'}}>ACCESSING_NODE_01...</span>
-          <span style={{fontSize:9,color:'#4a6a7a',textTransform:'uppercase',letterSpacing:'0.1em'}}>ENCRYPTION_BYPASS_SUCCESS</span>
-        </div>
-        <div style={{display:'flex',alignItems:'center',gap:6}}>
-          <div style={{width:6,height:6,borderRadius:'50%',background:'#00e5a0',animation:'ledBlink 2s infinite'}}/>
-          <span style={{fontSize:9,color:'#00e5a0',textTransform:'uppercase',letterSpacing:'0.08em'}}>SECURE_TUNNEL_ACTIVE</span>
-        </div>
-      </footer>
-
-      {/* ── END SCREEN ───────────────────────────────────────────────── */}
+      {/* ── End Screen Overlay ─────────────────────────────────────── */}
       {showEndScreen&&(
         <div style={{position:'fixed',inset:0,background:'rgba(1,8,16,0.96)',zIndex:200,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:16,padding:20}}>
-          <div style={{fontFamily:'"Syne",sans-serif',fontSize:28,fontWeight:800,color:'#00e5a0',textShadow:'0 0 30px #00e5a080',textAlign:'center'}}>
+          <div style={{fontFamily:'Syne,sans-serif',fontSize:28,fontWeight:800,color:'#00e5a0',textShadow:'0 0 30px #00e5a080',textAlign:'center'}}>
             {bankruptCount>=3?'🏆 ALL RANSOMS CLAIMED':'🚨 VAULT HIJACKED'}
           </div>
-          <div style={{fontSize:9,color:'#2a5a7a',letterSpacing:'0.1em'}}>SESSION SUMMARY — RETURNING TO LOBBY</div>
+          <div style={{fontFamily:'DM Mono,monospace',fontSize:9,color:'#2a5a7a',letterSpacing:'0.1em'}}>
+            SESSION SUMMARY — RETURNING TO LOBBY
+          </div>
           <div style={{width:'100%',maxWidth:480,background:'#020d1a',border:'1px solid #0a3a5a',borderRadius:14,padding:16,display:'flex',flexDirection:'column',gap:8}}>
             {winRecords.length>0?(
               winRecords.map((r,i)=>(
                 <div key={i} style={{borderBottom:'1px solid #0a2535',paddingBottom:6,marginBottom:2}}>
-                <div key={i} style={{borderBottom:'1px solid #0a2535',paddingBottom:6,marginBottom:2}}>
-                  <div style={{fontFamily:'"DM Mono",monospace',fontSize:8,color:LED_COLORS[r.wt],marginBottom:3}}>
+                  <div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:LED_COLORS[r.wt],marginBottom:3}}>
                     {WIN_LABELS[r.wt]} — Round {r.round}
                   </div>
                   {r.claimers.map((cl,j)=>(
                     <div key={j} style={{display:'flex',justifyContent:'space-between',padding:'1px 8px'}}>
-                      <span style={{fontFamily:'"DM Mono",monospace',fontSize:7,color:'#4a7fa5'}}>{cl}</span>
-                      <span style={{fontFamily:'"DM Mono",monospace',fontSize:7,color:'#f59e0b'}}>${(r.split/1000).toFixed(0)}K + {r.rnsmEach} RNSM</span>
+                      <span style={{fontFamily:'DM Mono,monospace',fontSize:7,color:'#4a7fa5'}}>{cl}</span>
+                      <span style={{fontFamily:'DM Mono,monospace',fontSize:7,color:'#f59e0b'}}>${(r.split/1000).toFixed(0)}K + {r.rnsmEach} RNSM</span>
                     </div>
                   ))}
                 </div>
               ))
             ):(
-              <div style={{fontFamily:'"DM Mono",monospace',fontSize:8,color:'#1e4a6a',textAlign:'center',padding:12}}>
+              <div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#1e4a6a',textAlign:'center',padding:12}}>
                 No ransoms claimed — vault transferred to treasury
               </div>
             )}
             <div style={{display:'flex',justifyContent:'space-between',paddingTop:4,borderTop:'1px solid #0a3a5a'}}>
-              <span style={{fontFamily:'"DM Mono",monospace',fontSize:7,color:'#1e4a6a'}}>TOTAL CLAIMED</span>
-              <span style={{fontFamily:'"DM Mono",monospace',fontSize:8,color:'#00e5a0',fontWeight:700}}>${(winRecords.reduce((s,r)=>s+r.split*r.claimers.length,0)/1000).toFixed(0)}K</span>
+              <span style={{fontFamily:'DM Mono,monospace',fontSize:7,color:'#1e4a6a'}}>TOTAL CLAIMED</span>
+              <span style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#00e5a0',fontWeight:700}}>${(winRecords.reduce((s,r)=>s+r.split*r.claimers.length,0)/1000).toFixed(0)}K</span>
             </div>
           </div>
-          <div style={{fontFamily:'"DM Mono",monospace',fontSize:7,color:'#1e4a6a',animation:'ledBlink 1s infinite'}}>
+          <div style={{fontFamily:'DM Mono,monospace',fontSize:7,color:'#1e4a6a',animation:'ledBlink 1s infinite'}}>
             ⬡ ALL DEVICES DEACTIVATED — WIPING SESSION DATA…
           </div>
         </div>
       )}
 
       {announcement&&(
-        <div style={{position:'fixed',bottom:20,left:'50%',transform:'translateX(-50%)',background:'#020d1a',border:'1px solid #00e5a040',borderRadius:10,padding:'10px 18px',fontFamily:'"DM Mono",monospace',fontSize:10,color:'#00e5a0',zIndex:999,whiteSpace:'pre',boxShadow:'0 8px 24px rgba(0,0,0,0.5)',maxWidth:'90vw'}}>
+        <div style={{position:'fixed',bottom:20,left:'50%',transform:'translateX(-50%)',background:'#020d1a',border:'1px solid #00e5a040',borderRadius:10,padding:'10px 18px',fontFamily:'DM Mono,monospace',fontSize:10,color:'#00e5a0',zIndex:999,whiteSpace:'pre',boxShadow:'0 8px 24px rgba(0,0,0,0.5)',maxWidth:'90vw'}}>
           {announcement}
         </div>
       )}
@@ -2299,30 +2175,30 @@ function Ransome(){
     <div style={{background:'linear-gradient(180deg,#010810,#020d1a)',color:'#c8d8e8',minHeight:'100vh'}}>
       {/* Header */}
       <div style={{padding:'7px 12px',borderBottom:'1px solid #0a1f3a',display:'flex',alignItems:'center',background:'rgba(2,13,26,0.96)',backdropFilter:'blur(12px)',WebkitBackdropFilter:'blur(12px)',position:'sticky',top:0,zIndex:50}}>
-        <div style={{fontFamily:'"Syne",sans-serif',fontSize:17,fontWeight:800,color:'#00e5a0',flexShrink:0}}>RANSOME</div>
+        <div style={{fontFamily:'Syne,sans-serif',fontSize:17,fontWeight:800,color:'#00e5a0',flexShrink:0}}>RANSOME</div>
         <div style={{flex:1,margin:'0 10px',height:26,background:'rgba(0,229,160,0.02)',border:'1px dashed #0a2535',borderRadius:5,display:'flex',alignItems:'center',justifyContent:'center'}}>
-          <span style={{fontFamily:'"DM Mono",monospace',fontSize:7,color:'#0a2535'}}>AD</span>
+          <span style={{fontFamily:'DM Mono,monospace',fontSize:7,color:'#0a2535'}}>AD</span>
         </div>
         <div style={{display:'flex',gap:6,alignItems:'center',flexShrink:0,flexWrap:'wrap'}}>
-          {preGameSecs>0&&<div style={{fontFamily:'"DM Mono",monospace',fontSize:8,color:'#f59e0b',background:'rgba(245,158,11,0.08)',border:'1px solid rgba(245,158,11,0.25)',borderRadius:6,padding:'3px 7px'}}>⏱ {fmtTime(preGameSecs)}</div>}
-          {onChainSession&&phase==='game'&&<div style={{fontFamily:'"DM Mono",monospace',fontSize:7,color:'#00e5a0',background:'rgba(0,229,160,0.06)',border:'1px solid rgba(0,229,160,0.2)',borderRadius:6,padding:'3px 6px'}}>
+          {preGameSecs>0&&<div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#f59e0b',background:'rgba(245,158,11,0.08)',border:'1px solid rgba(245,158,11,0.25)',borderRadius:6,padding:'3px 7px'}}>⏱ {fmtTime(preGameSecs)}</div>}
+          {onChainSession&&phase==='game'&&<div style={{fontFamily:'DM Mono,monospace',fontSize:7,color:'#00e5a0',background:'rgba(0,229,160,0.06)',border:'1px solid rgba(0,229,160,0.2)',borderRadius:6,padding:'3px 6px'}}>
             ⛓ {onChainSession.drawCount}/90 on-chain
           </div>}
-          {phase==='game'&&preGameSecs===0&&<div style={{fontFamily:'"DM Mono",monospace',fontSize:7,color:sessionSecs>=(57*60)?'#ef4444':'#2a5a7a',background:sessionSecs>=(57*60)?'rgba(239,68,68,0.08)':'transparent',border:sessionSecs>=(57*60)?'1px solid rgba(239,68,68,0.25)':'none',borderRadius:6,padding:'3px 6px',transition:'all 0.5s'}}>
+          {phase==='game'&&preGameSecs===0&&<div style={{fontFamily:'DM Mono,monospace',fontSize:7,color:sessionSecs>=(57*60)?'#ef4444':'#2a5a7a',background:sessionSecs>=(57*60)?'rgba(239,68,68,0.08)':'transparent',border:sessionSecs>=(57*60)?'1px solid rgba(239,68,68,0.25)':'none',borderRadius:6,padding:'3px 6px',transition:'all 0.5s'}}>
             {sessionSecs>=(57*60)?'🚨':'⏱'} {String(Math.floor(sessionSecs/60)).padStart(2,'0')}:{String(sessionSecs%60).padStart(2,'0')}
           </div>}
-          <div style={{fontFamily:'"DM Mono",monospace',fontSize:8,color:'#ef4444',background:'rgba(239,68,68,0.08)',border:'1px solid rgba(239,68,68,0.2)',borderRadius:6,padding:'3px 7px'}}>🔴 {BANKS[liveBank].name}</div>
-          <div style={{fontFamily:'"DM Mono",monospace',fontSize:8,color:'#4a7fa5',background:'#0a1628',borderRadius:6,padding:'3px 7px'}}>👤 {nickname}</div>
+          <div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#ef4444',background:'rgba(239,68,68,0.08)',border:'1px solid rgba(239,68,68,0.2)',borderRadius:6,padding:'3px 7px'}}>🔴 {BANKS[liveBank].name}</div>
+          <div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#4a7fa5',background:'#0a1628',borderRadius:6,padding:'3px 7px'}}>👤 {nickname}</div>
           {wallet?(
             <div style={{display:'flex',alignItems:'center',gap:3}}>
-              <div style={{fontFamily:'"DM Mono",monospace',fontSize:7,color:'#00e5a0',background:'#0a1628',border:'1px solid #00e5a030',borderRadius:6,padding:'3px 7px',display:'flex',alignItems:'center',gap:4}}>
+              <div style={{fontFamily:'DM Mono,monospace',fontSize:7,color:'#00e5a0',background:'#0a1628',border:'1px solid #00e5a030',borderRadius:6,padding:'3px 7px',display:'flex',alignItems:'center',gap:4}}>
                 <div style={{width:4,height:4,borderRadius:'50%',background:'#22c55e'}}/>
                 {wallet.slice(0,6)}…{wallet.slice(-4)}
               </div>
               <button onClick={()=>disconnect()} style={{background:'transparent',border:'1px solid rgba(239,68,68,0.2)',borderRadius:6,padding:'3px 6px',color:'#ef4444',cursor:'pointer',fontSize:9,lineHeight:1}}>✕</button>
             </div>
           ):(
-            <WalletMultiButton style={{background:'linear-gradient(135deg,#00e5a0,#00b8ff)',color:'#000',borderRadius:6,fontFamily:'"DM Mono",monospace',fontSize:7.5,fontWeight:700,height:'auto',padding:'4px 8px'}}/>
+            <WalletMultiButton style={{background:'linear-gradient(135deg,#00e5a0,#00b8ff)',color:'#000',borderRadius:6,fontFamily:'DM Mono,monospace',fontSize:7.5,fontWeight:700,height:'auto',padding:'4px 8px'}}/>
           )}
         </div>
       </div>
@@ -2355,7 +2231,7 @@ function Ransome(){
               <div style={{width:7,height:5,borderRadius:1,background:st.expired?'#3f1010':LED_COLORS[type],opacity:st.claimed?0.3:st.expired?0.4:1,
                 animation:st.broken?'none':st.expired?'ledExpire 0.4s ease forwards':st.flickering?'rapidFlicker 0.08s infinite':st.claimable&&!st.claimed?'ledBlink 0.6s infinite':'none',
                 boxShadow:st.claimable&&!st.claimed&&!st.expired?`0 0 4px ${LED_COLORS[type]}`:'none'}}/>
-              <span style={{fontFamily:'"DM Mono",monospace',fontSize:6.5,color:st.claimed?'#22c55e':st.claimable?'#ec4899':'#1e4a6a',whiteSpace:'nowrap'}}>
+              <span style={{fontFamily:'DM Mono,monospace',fontSize:6.5,color:st.claimed?'#22c55e':st.claimable?'#ec4899':'#1e4a6a',whiteSpace:'nowrap'}}>
                 {st.claimed?'✓ ':st.claimable?'⚡ ':'○ '}{label}
               </span>
             </div>
@@ -2366,17 +2242,17 @@ function Ransome(){
       {/* Devices section: 2 cols normal, maximize opens full screen */}
       <div style={{padding:'10px 12px 20px'}}>
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:8}}>
-          <div style={{fontFamily:'"DM Mono",monospace',fontSize:8,color:'#1e4a6a'}}>
+          <div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#1e4a6a'}}>
             ◈ NFT DEVICES &nbsp;<span style={{color:'#2a5a7a'}}>{devices.length} total · {devices.filter(d=>d.active).length} active</span>
           </div>
           <div style={{display:'flex',gap:5,alignItems:'center'}}>
-            <button onClick={handleActivateAll} style={{background:'#0a1628',border:'1px solid #00e5a030',color:'#00e5a0',borderRadius:7,padding:'4px 9px',fontFamily:'"DM Mono",monospace',fontSize:7.5,cursor:'pointer'}}>
+            <button onClick={handleActivateAll} style={{background:'#0a1628',border:'1px solid #00e5a030',color:'#00e5a0',borderRadius:7,padding:'4px 9px',fontFamily:'DM Mono,monospace',fontSize:7.5,cursor:'pointer'}}>
               ⚡ ALL ON
             </button>
-            <button onClick={()=>setDevicesExpanded(true)} style={{background:'#0a1628',border:'1px solid #1e3a5f',color:'#2a5a7a',borderRadius:7,padding:'4px 10px',fontFamily:'"DM Mono",monospace',fontSize:7.5,cursor:'pointer'}}>
+            <button onClick={()=>setDevicesExpanded(true)} style={{background:'#0a1628',border:'1px solid #1e3a5f',color:'#2a5a7a',borderRadius:7,padding:'4px 10px',fontFamily:'DM Mono,monospace',fontSize:7.5,cursor:'pointer'}}>
               ⊞ MAXIMIZE
             </button>
-            <button onClick={()=>setShowTerminate(true)} style={{background:'rgba(127,0,0,0.25)',border:'1px solid #7f0000',color:'#ef4444',borderRadius:7,padding:'4px 9px',fontFamily:'"DM Mono",monospace',fontSize:7.5,cursor:'pointer',letterSpacing:'0.05em'}}>
+            <button onClick={()=>setShowTerminate(true)} style={{background:'rgba(127,0,0,0.25)',border:'1px solid #7f0000',color:'#ef4444',borderRadius:7,padding:'4px 9px',fontFamily:'DM Mono,monospace',fontSize:7.5,cursor:'pointer',letterSpacing:'0.05em'}}>
               ⏻ TERMINATE
             </button>
           </div>
@@ -2392,7 +2268,7 @@ function Ransome(){
       </div>
 
       {announcement&&(
-        <div style={{position:'fixed',top:52,left:'50%',transform:'translateX(-50%)',background:'#020d1a',border:'1px solid #00e5a040',borderRadius:10,padding:'9px 16px',fontFamily:'"DM Mono",monospace',fontSize:10,color:'#00e5a0',zIndex:999,whiteSpace:'pre',boxShadow:'0 8px 24px rgba(0,0,0,0.5)',animation:'slideDown 0.3s ease',maxWidth:'90vw'}}>
+        <div style={{position:'fixed',top:52,left:'50%',transform:'translateX(-50%)',background:'#020d1a',border:'1px solid #00e5a040',borderRadius:10,padding:'9px 16px',fontFamily:'DM Mono,monospace',fontSize:10,color:'#00e5a0',zIndex:999,whiteSpace:'pre',boxShadow:'0 8px 24px rgba(0,0,0,0.5)',animation:'slideDown 0.3s ease',maxWidth:'90vw'}}>
           {announcement}
         </div>
       )}
@@ -2408,13 +2284,13 @@ function Ransome(){
               <div style={{width:36,height:36,borderRadius:'50%',background:'rgba(239,68,68,0.12)',border:'2px solid #ef4444',
                 display:'flex',alignItems:'center',justifyContent:'center',fontSize:18,flexShrink:0}}>⚠</div>
               <div>
-                <div style={{fontFamily:'"Syne",sans-serif',fontSize:16,fontWeight:800,color:'#ef4444',letterSpacing:'0.05em'}}>TERMINATE SESSION</div>
-                <div style={{fontFamily:'"DM Mono",monospace',fontSize:7.5,color:'#7f2020',marginTop:2}}>WALLET · {wallet||nickname}</div>
+                <div style={{fontFamily:'Syne,sans-serif',fontSize:16,fontWeight:800,color:'#ef4444',letterSpacing:'0.05em'}}>TERMINATE SESSION</div>
+                <div style={{fontFamily:'DM Mono,monospace',fontSize:7.5,color:'#7f2020',marginTop:2}}>WALLET · {wallet||nickname}</div>
               </div>
             </div>
             {/* Warning body */}
             <div style={{background:'rgba(127,0,0,0.12)',border:'1px solid rgba(239,68,68,0.2)',borderRadius:8,padding:'12px 14px',marginBottom:18}}>
-              <div style={{fontFamily:'"DM Mono",monospace',fontSize:8,color:'#ef4444',marginBottom:8,letterSpacing:'0.1em'}}>⚠ WARNING — IRREVERSIBLE ACTION</div>
+              <div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#ef4444',marginBottom:8,letterSpacing:'0.1em'}}>⚠ WARNING — IRREVERSIBLE ACTION</div>
               {[
                 'All minted NFT devices will be deactivated',
                 'Current game session & progress will be wiped',
@@ -2424,7 +2300,7 @@ function Ransome(){
               ].map((line,i)=>(
                 <div key={i} style={{display:'flex',gap:7,alignItems:'flex-start',marginBottom:4}}>
                   <span style={{color:'#7f2020',flexShrink:0,marginTop:1}}>›</span>
-                  <span style={{fontFamily:'"DM Mono",monospace',fontSize:7.5,color:'#a05050',lineHeight:1.5}}>{line}</span>
+                  <span style={{fontFamily:'DM Mono,monospace',fontSize:7.5,color:'#a05050',lineHeight:1.5}}>{line}</span>
                 </div>
               ))}
             </div>
@@ -2432,17 +2308,17 @@ function Ransome(){
             <div style={{display:'flex',gap:8}}>
               <button onClick={()=>setShowTerminate(false)}
                 style={{flex:1,background:'#0a1628',border:'1px solid #1e3a5f',color:'#4a7fa5',borderRadius:8,
-                  padding:'10px',fontFamily:'"DM Mono",monospace',fontSize:8,cursor:'pointer',letterSpacing:'0.05em'}}>
+                  padding:'10px',fontFamily:'DM Mono,monospace',fontSize:8,cursor:'pointer',letterSpacing:'0.05em'}}>
                 ABORT
               </button>
               <button onClick={terminateGame}
                 style={{flex:1,background:'linear-gradient(135deg,#3f0000,#200000)',border:'2px solid #ef4444',color:'#ef4444',
-                  borderRadius:8,padding:'10px',fontFamily:'"Syne",sans-serif',fontSize:11,fontWeight:800,cursor:'pointer',
+                  borderRadius:8,padding:'10px',fontFamily:'Syne,sans-serif',fontSize:11,fontWeight:800,cursor:'pointer',
                   letterSpacing:'0.1em',boxShadow:'0 0 16px rgba(239,68,68,0.25)',animation:'ransomPulse 2s infinite'}}>
                 ⏻ CONFIRM TERMINATE
               </button>
             </div>
-            <div style={{fontFamily:'"DM Mono",monospace',fontSize:6.5,color:'#3f1010',textAlign:'center',marginTop:10}}>
+            <div style={{fontFamily:'DM Mono,monospace',fontSize:6.5,color:'#3f1010',textAlign:'center',marginTop:10}}>
               click outside to dismiss · this action cannot be undone
             </div>
           </div>
