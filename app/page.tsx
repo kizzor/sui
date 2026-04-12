@@ -173,99 +173,45 @@ function WorldMapSketch({currentHour,onSelectBank}:{currentHour:number;onSelectB
   const hourCd=useHourCountdown()
   const[hov,setHov]=useState<number|null>(null)
   return(
-    <div style={{position:'relative',width:'100%',background:'#010c18',borderRadius:16,border:'1px solid #0a2535',overflow:'hidden'}}>
-      <svg viewBox="0 0 200 105" style={{width:'100%',display:'block'}}>
-        {/* Ocean grid */}
-        {Array.from({length:21},(_,i)=><line key={`vg${i}`} x1={i*10} y1="0" x2={i*10} y2="105" stroke="#0a1830" strokeWidth="0.3"/>)}
-        {Array.from({length:11},(_,i)=><line key={`hg${i}`} x1="0" y1={i*10} x2="200" y2={i*10} stroke="#0a1830" strokeWidth="0.3"/>)}
-
-        {/* ── Continent outlines (sketch style) ── */}
-        {/* North America */}
-        <path d="M20,8 L38,8 L42,14 L40,20 L44,26 L42,34 L38,38 L34,42 L28,46 L22,50 L18,44 L16,36 L14,28 L16,20 L18,12 Z"
-          fill="none" stroke="#1e3a5f" strokeWidth="0.6" strokeDasharray="2,1" strokeLinejoin="round"/>
-        {/* Central America */}
-        <path d="M28,46 L32,50 L30,56 L26,58 L24,54 L26,50 Z"
-          fill="none" stroke="#1e3a5f" strokeWidth="0.5" strokeDasharray="2,1"/>
-        {/* South America */}
-        <path d="M30,58 L40,56 L46,60 L48,68 L46,78 L40,84 L34,82 L28,74 L26,66 L28,60 Z"
-          fill="none" stroke="#1e3a5f" strokeWidth="0.6" strokeDasharray="2,1"/>
-        {/* Europe */}
-        <path d="M86,6 L96,6 L100,10 L100,16 L96,18 L92,22 L88,20 L84,16 L84,10 Z"
-          fill="none" stroke="#1e3a5f" strokeWidth="0.6" strokeDasharray="2,1"/>
-        {/* Scandinavia */}
-        <path d="M90,4 L96,4 L98,8 L94,10 L90,8 Z"
-          fill="none" stroke="#1e3a5f" strokeWidth="0.5" strokeDasharray="1.5,1"/>
-        {/* Africa */}
-        <path d="M88,28 L100,26 L108,30 L110,40 L108,52 L104,62 L98,70 L92,74 L86,70 L82,62 L80,50 L82,38 L86,30 Z"
-          fill="none" stroke="#1e3a5f" strokeWidth="0.6" strokeDasharray="2,1"/>
-        {/* Russia */}
-        <path d="M100,4 L140,4 L148,8 L150,14 L142,16 L130,14 L118,16 L108,14 L100,10 Z"
-          fill="none" stroke="#1e3a5f" strokeWidth="0.5" strokeDasharray="2,1"/>
-        {/* Middle East */}
-        <path d="M108,28 L122,26 L126,32 L124,38 L116,40 L110,38 L108,32 Z"
-          fill="none" stroke="#1e3a5f" strokeWidth="0.5" strokeDasharray="1.5,1"/>
-        {/* India */}
-        <path d="M122,30 L132,28 L136,36 L134,44 L128,50 L122,44 L120,36 Z"
-          fill="none" stroke="#1e3a5f" strokeWidth="0.5" strokeDasharray="2,1"/>
-        {/* China/East Asia */}
-        <path d="M136,8 L160,6 L168,12 L166,20 L158,24 L148,22 L138,18 L134,12 Z"
-          fill="none" stroke="#1e3a5f" strokeWidth="0.5" strokeDasharray="2,1"/>
-        {/* SE Asia */}
-        <path d="M148,28 L158,26 L162,32 L160,38 L154,40 L148,36 Z"
-          fill="none" stroke="#1e3a5f" strokeWidth="0.5" strokeDasharray="1.5,1"/>
-        {/* Japan */}
-        <path d="M164,16 L170,14 L172,18 L168,20 L164,18 Z"
-          fill="none" stroke="#1e3a5f" strokeWidth="0.5" strokeDasharray="1,1"/>
-        {/* Australia */}
-        <path d="M158,62 L178,60 L184,66 L184,74 L178,80 L166,80 L158,74 L156,68 Z"
-          fill="none" stroke="#1e3a5f" strokeWidth="0.6" strokeDasharray="2,1"/>
-
-        {/* Equator & Tropics subtle lines */}
-        <line x1="0" y1="52" x2="200" y2="52" stroke="#0a2030" strokeWidth="0.4" strokeDasharray="3,3"/>
-        <text x="2" y="51" fontSize="2.2" fill="#0a2535">EQ</text>
-
-        {/* Connection lines from live bank to others */}
+    <div style={{position:'relative',width:'100%',background:'#020c18',overflow:'hidden',minHeight:280}}>
+      <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-qpHYdNrYszBgUEZK-XDwmoipoMY4fuwa6ooHcfdmGgOMR5hPsRnliaYv7UJIzsxEbBsoczbGp6nMjFaXT_Rwg2-zWBrnyEkuAKxW9KAc96MFqIKwxhSHGFXRMNEgYKENqjtU0LSdGC7Rj88SfAUFBK0_gcGjXckGkgXuEZySbIs4zWwpI6knvocSlgQdEYGheuw7Zanu5xobKhkWNSKh8okeX4k4QU0KSuxu-CD85KNnOYUlO0lEYScZM-1_wi7E_IAnX1gr460x"
+        style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'center',position:'absolute',inset:0,opacity:0.4,filter:'saturate(0.3) brightness(0.6) contrast(1.2)',pointerEvents:'none'}} alt=""/>
+      <svg viewBox="0 0 400 210" style={{width:'100%',display:'block',position:'relative',zIndex:2}}>
+        {Array.from({length:41},(_,i)=><line key={"vg"+i} x1={i*10} y1="0" x2={i*10} y2="210" stroke="#0a1830" strokeWidth="0.15"/>)}
+        {Array.from({length:22},(_,i)=><line key={"hg"+i} x1="0" y1={i*10} x2="400" y2={i*10} stroke="#0a1830" strokeWidth="0.15"/>)}
+        <line x1="0" y1="105" x2="400" y2="105" stroke="#0a2535" strokeWidth="0.6" strokeDasharray="4,4"/>
+        <text x="4" y="103" fontSize="3.5" fill="#0a2535">EQ</text>
         {BANKS.filter(b=>b.id!==live).map(b=>(
-          <line key={`cl${b.id}`} x1={BANKS[live].x*2} y1={BANKS[live].y} x2={b.x*2} y2={b.y}
-            stroke="#00e5a010" strokeWidth="0.3" strokeDasharray="1,3"/>
+          <line key={"cl"+b.id} x1={BANKS[live].x*4} y1={BANKS[live].y*2} x2={b.x*4} y2={b.y*2} stroke="#00e5a008" strokeWidth="0.5" strokeDasharray="2,5"/>
         ))}
-
-        {/* Bank dots */}
         {BANKS.map(b=>{
           const isLive=b.id===live,isHov=b.id===hov
           const rc=REGION_COLORS[b.region]||'#1e3a5f'
-          const bx=b.x*2,by=b.y
+          const bx=b.x*4,by=b.y*2
           return(
-            <g key={b.id} onClick={()=>onSelectBank?.(b.id)}
-              onMouseEnter={()=>setHov(b.id)} onMouseLeave={()=>setHov(null)}
-              style={{cursor:'pointer'}}>
+            <g key={b.id} onClick={()=>onSelectBank?.(b.id)} onMouseEnter={()=>setHov(b.id)} onMouseLeave={()=>setHov(null)} style={{cursor:'pointer'}}>
               {isLive&&<>
-                <circle cx={bx} cy={by} r="5" fill={`${rc}15`}><animate attributeName="r" values="3;7;3" dur="2s" repeatCount="indefinite"/></circle>
-                <circle cx={bx} cy={by} r="3" fill={`${rc}25`}><animate attributeName="r" values="2;4.5;2" dur="2s" begin="0.4s" repeatCount="indefinite"/></circle>
+                <rect x={bx-10} y={by-10} width="20" height="20" fill={rc+"08"} stroke="none"><animate attributeName="width" values="10;28;10" dur="2.5s" repeatCount="indefinite"/><animate attributeName="height" values="10;28;10" dur="2.5s" repeatCount="indefinite"/><animate attributeName="x" values={`${bx-5};${bx-14};${bx-5}`} dur="2.5s" repeatCount="indefinite"/><animate attributeName="y" values={`${by-5};${by-14};${by-5}`} dur="2.5s" repeatCount="indefinite"/></rect>
+                <rect x={bx-5} y={by-5} width="10" height="10" fill={rc+"15"} stroke={rc} strokeWidth="0.5"><animate attributeName="width" values="6;14;6" dur="2s" repeatCount="indefinite"/><animate attributeName="height" values="6;14;6" dur="2s" repeatCount="indefinite"/><animate attributeName="x" values={`${bx-3};${bx-7};${bx-3}`} dur="2s" repeatCount="indefinite"/><animate attributeName="y" values={`${by-3};${by-7};${by-3}`} dur="2s" repeatCount="indefinite"/></rect>
               </>}
-              <circle cx={bx} cy={by} r={isLive?2.2:isHov?1.8:1.2}
-                fill={isLive?rc:isHov?'#00e5a0':'#1e4a6a'}
-                stroke={isLive?'rgba(255,255,255,0.8)':isHov?'#6ee7b7':'#2a5a7a'} strokeWidth="0.4"/>
-              {/* Bank icon — small rectangle */}
+              <rect x={bx-2.5} y={by-2.5} width="5" height="5" rx="0.5"
+                fill={isLive?rc+"60":isHov?'#00e5a040':'transparent'}
+                stroke={isLive?rc:isHov?'#00e5a0':'#2a5a7a'} strokeWidth={isLive?1.5:0.8}/>
+              <circle cx={bx} cy={by} r="1" fill={isLive?rc:isHov?'#00e5a0':'#1e4a6a'}/>
               {(isHov||isLive)&&<>
-                <rect x={bx-2.5} y={by-6.5} width="5" height="4" rx="0.5"
-                  fill="none" stroke={isLive?rc:'#00e5a0'} strokeWidth="0.4"/>
-                <line x1={bx-2} y1={by-3} x2={bx+2} y2={by-3} stroke={isLive?rc:'#00e5a0'} strokeWidth="0.3"/>
+                <rect x={bx-14} y={by-20} width="28" height="14" rx="1.5" fill="#010c18ee" stroke={isLive?rc:'#00e5a0'} strokeWidth="0.7"/>
+                <text x={bx} y={by-13} textAnchor="middle" fontSize="5" fill={isLive?rc:'#00e5a0'} fontWeight="bold">{b.city}</text>
+                <text x={bx} y={by-7} textAnchor="middle" fontSize="3.5" fill="#4a7fa5">{isLive?'⏱ '+fmtTime(hourCd):b.vault}</text>
               </>}
-              {(isHov||isLive)&&<text x={bx} y={by+5} textAnchor="middle" fontSize="2.6" fill={isLive?rc:'#00e5a0'} fontWeight="bold">{b.city}</text>}
-              {isHov&&<text x={bx} y={by+8.5} textAnchor="middle" fontSize="2.0" fill="#2a5a7a">{b.vault}</text>}
-              {isLive&&<text x={bx} y={by+8.5} textAnchor="middle" fontSize="2.2" fill={rc}>⏱ {fmtTime(hourCd)}</text>}
             </g>
           )
         })}
-        {/* Legend */}
-        <text x="2" y="100" fontSize="2.2" fill="#1e3a5f">◉ LIVE  ● SCHEDULED  — VAULT CONNECTION</text>
+        <text x="4" y="206" fontSize="3.5" fill="#1e3a5f">■ LIVE  □ SCHEDULED  — VAULT LINK</text>
       </svg>
     </div>
   )
 }
 
-// ─── Device Skeleton (wraps mint panel) ──────────────────────────────────────
 function DeviceSkeleton({children,title}:{children:React.ReactNode;title:string}){
   return(
     <div style={{background:'linear-gradient(180deg,#0d1a2e,#060e1a)',border:'2px solid #1e3a5f',borderRadius:16,overflow:'hidden',boxShadow:'0 8px 32px rgba(0,0,0,0.6)'}}>
@@ -1381,6 +1327,263 @@ function MaximizedDevices({devices,currentNum,clickWindowOpen,calledNums,onCellC
 }
 
 
+
+// ─── Missions Demo Tab ────────────────────────────────────────────────────────
+function MissionsDemo(){
+  const[step,setStep]=useState(0)
+  const[drawn,setDrawn]=useState<number[]>([])
+  const[matched1,setMatched1]=useState<Set<number>>(new Set())
+  const[matched2,setMatched2]=useState<Set<number>>(new Set())
+  const[log,setLog]=useState<string[]>(['⬡ DEMO MODE — Watch 2 devices compete for the vault...'])
+  const[running,setRunning]=useState(false)
+  const[won,setWon]=useState<string|null>(null)
+
+  const GRID1=[[7,22,34,0,56,0,71,82,90],[0,15,0,38,0,52,0,88,0],[3,0,29,41,0,63,74,0,85]]
+  const GRID2=[[9,21,0,37,0,55,68,0,89],[2,0,33,0,48,0,72,83,0],[0,17,28,0,57,0,0,86,91]]
+
+  const allNums=Array.from({length:90},(_,i)=>i+1)
+
+  const runStep=()=>{
+    if(running||won)return
+    setRunning(true)
+    let d=[...drawn]
+    let m1=new Set(matched1),m2=new Set(matched2)
+    let logs=[...log]
+    let winner=null
+
+    const interval=setInterval(()=>{
+      const remaining=allNums.filter(n=>!d.includes(n))
+      if(!remaining.length){clearInterval(interval);setRunning(false);return}
+      const n=remaining[Math.floor(Math.random()*remaining.length)]
+      d=[...d,n]
+      setDrawn([...d])
+
+      const flat1=GRID1.flat().filter(x=>x>0)
+      const flat2=GRID2.flat().filter(x=>x>0)
+      if(flat1.includes(n)){m1=new Set([...m1,n]);setMatched1(new Set(m1))}
+      if(flat2.includes(n)){m2=new Set([...m2,n]);setMatched2(new Set(m2))}
+
+      logs=[`🎲 Drew #${n}${flat1.includes(n)?' — Device A matched!':flat2.includes(n)?' — Device B matched!':''}`, ...logs.slice(0,6)]
+      setLog([...logs])
+
+      // Check wins
+      const row0_1=GRID1[0].filter(x=>x>0).every(x=>m1.has(x))
+      const row0_2=GRID2[0].filter(x=>x>0).every(x=>m2.has(x))
+      const early1=[...m1].length>=5
+      const early2=[...m2].length>=5
+
+      if(early1&&!winner&&[...m1].length===5){
+        winner='A'
+        logs=['🏆 DEVICE A wins EARLY FIVE! +10% vault claimed',...logs.slice(0,5)]
+        setLog([...logs]);setWon('A')
+        clearInterval(interval);setRunning(false)
+      } else if(early2&&!winner&&[...m2].length===5){
+        winner='B'
+        logs=['🏆 DEVICE B wins EARLY FIVE! +10% vault claimed',...logs.slice(0,5)]
+        setLog([...logs]);setWon('B')
+        clearInterval(interval);setRunning(false)
+      } else if(row0_1&&!winner){
+        winner='A'
+        logs=['🏆 DEVICE A wins TOP LINE! +10% vault claimed',...logs.slice(0,5)]
+        setLog([...logs]);setWon('A')
+        clearInterval(interval);setRunning(false)
+      } else if(row0_2&&!winner){
+        winner='B'
+        logs=['🏆 DEVICE B wins TOP LINE! +10% vault claimed',...logs.slice(0,5)]
+        setLog([...logs]);setWon('B')
+        clearInterval(interval);setRunning(false)
+      }
+    },600)
+  }
+
+  const reset=()=>{setDrawn([]);setMatched1(new Set());setMatched2(new Set());setLog(['⬡ DEMO MODE — Watch 2 devices compete for the vault...']);setWon(null);setRunning(false)}
+
+  const renderGrid=(grid:number[][],matched:Set<number>,label:string,color:string)=>(
+    <div style={{background:'#09141e',border:'1px solid '+(won===label?color:'rgba(63,73,83,0.3)'),padding:12,flex:1,boxShadow:won===label?'0 0 20px '+color+'40':'none',transition:'all 0.3s'}}>
+      <div style={{display:'flex',justifyContent:'space-between',marginBottom:8}}>
+        <span style={{fontSize:10,color,fontWeight:700}}>DEVICE {label}</span>
+        <span style={{fontSize:9,color:'#4a6a7a'}}>{matched.size}/15 matched</span>
+      </div>
+      {grid.map((row,ri)=>(
+        <div key={ri} style={{display:'flex',gap:3,marginBottom:3}}>
+          {row.map((cell,ci)=>{
+            const isMatch=cell>0&&matched.has(cell)
+            const isLast=cell>0&&drawN&&cell===drawN
+            return(<div key={ci} style={{flex:1,height:28,display:'flex',alignItems:'center',justifyContent:'center',
+              background:isMatch?color+'30':isLast?'rgba(255,255,0,0.15)':'rgba(0,0,0,0.4)',
+              border:'1px solid '+(isMatch?color:isLast?'#ffff00':'rgba(63,73,83,0.3)'),
+              fontSize:9,fontWeight:isMatch?700:400,color:isMatch?color:cell===0?'#1e3a5f':'#4a6a7a',
+              boxShadow:isMatch?'0 0 8px '+color+'60':'none',transition:'all 0.2s'}}>
+              {cell===0?'':cell}
+            </div>)
+          })}
+        </div>
+      ))}
+    </div>
+  )
+
+  const drawN=drawn[drawn.length-1]||null
+
+  return(
+    <div style={{flex:1,padding:20,display:'flex',flexDirection:'column',gap:16}}>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+        <div>
+          <div style={{fontSize:16,fontWeight:700,color:'#dce6f3'}}>📋 MISSIONS — GAME DEMO</div>
+          <div style={{fontSize:9,color:'#4a6a7a',marginTop:2}}>Watch a live game simulation with 2 devices competing</div>
+        </div>
+        <div style={{display:'flex',gap:8}}>
+          <button onClick={reset} style={{padding:'6px 14px',background:'rgba(63,73,83,0.3)',border:'1px solid rgba(63,73,83,0.5)',color:'#4a6a7a',fontSize:9,fontWeight:700,cursor:'pointer'}}>RESET</button>
+          <button onClick={runStep} disabled={running||!!won} style={{padding:'6px 14px',background:running||won?'rgba(0,229,160,0.1)':'linear-gradient(135deg,#00e5a0,#00b8ff)',color:running||won?'#4a6a7a':'#000',border:'none',fontSize:10,fontWeight:700,cursor:running||won?'default':'pointer'}}>
+            {won?'GAME OVER':running?'DRAWING...':'▶ DRAW NUMBER'}
+          </button>
+        </div>
+      </div>
+      {drawN&&<div style={{background:'rgba(47,243,173,0.06)',border:'1px solid rgba(47,243,173,0.2)',padding:'10px 16px',display:'flex',alignItems:'center',gap:12}}>
+        <span style={{fontSize:9,color:'#4a6a7a'}}>LAST DRAWN</span>
+        <span style={{fontSize:28,fontWeight:800,color:'#00e5a0'}}>{drawN}</span>
+        <span style={{fontSize:9,color:'#4a6a7a'}}>{drawn.length}/90 numbers drawn</span>
+        {won&&<span style={{marginLeft:'auto',fontSize:11,fontWeight:700,color:'#00e5a0'}}>🏆 DEVICE {won} WINS!</span>}
+      </div>}
+      <div style={{display:'flex',gap:12}}>
+        {renderGrid(GRID1,matched1,'A','#00e5a0')}
+        {renderGrid(GRID2,matched2,'B','#00b8ff')}
+      </div>
+      <div style={{background:'#09141e',border:'1px solid rgba(63,73,83,0.2)',padding:12}}>
+        <div style={{fontSize:9,color:'#4a6a7a',marginBottom:8}}>📡 DRAW LOG</div>
+        {log.map((l,i)=>(<div key={i} style={{fontSize:9,color:i===0?'#00e5a0':'#2a5a7a',padding:'3px 0',borderBottom:'1px solid rgba(10,25,40,0.5)'}}>{l}</div>))}
+      </div>
+      <div style={{background:'#09141e',border:'1px solid rgba(63,73,83,0.2)',padding:12}}>
+        <div style={{fontSize:9,color:'#4a6a7a',marginBottom:8}}>📖 WIN CONDITIONS</div>
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8}}>
+          {[['EARLY FIVE','First 5 cells matched','10%'],['TOP LINE','All 5 cells in row 1','10%'],['MIDDLE LINE','All 5 cells in row 2','10%'],['BOTTOM LINE','All 5 cells in row 3','10%'],['BANKRUPT I','All 15 cells matched','15%'],['BANKRUPT III','3rd full house','30%']].map(([name,desc,pct])=>(
+            <div key={name} style={{background:'rgba(0,0,0,0.3)',border:'1px solid rgba(63,73,83,0.2)',padding:'8px 10px'}}>
+              <div style={{fontSize:9,color:'#00e5a0',fontWeight:700,marginBottom:2}}>{name}</div>
+              <div style={{fontSize:8,color:'#4a6a7a',marginBottom:4}}>{desc}</div>
+              <div style={{fontSize:11,fontWeight:700,color:'#00b6fd'}}>{pct} vault</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+
+// ─── Network Hub Tab ─────────────────────────────────────────────────────────
+function NetworkHub({nickname,wallet}:{nickname:string;wallet:string|null}){
+  const[rooms,setRooms]=useState([
+    {id:'vault-hunters',name:'VAULT HUNTERS',members:12,private:false,topic:'Coordinating the next heist'},
+    {id:'early-birds',name:'EARLY BIRDS',members:5,private:false,topic:'Early Five strategy'},
+    {id:'global-ops',name:'GLOBAL OPS',members:28,private:false,topic:'Multi-region coordination'},
+  ])
+  const[activeRoom,setActiveRoom]=useState<string|null>(null)
+  const[msgs,setMsgs]=useState<{user:string;text:string;ts:number}[]>([
+    {user:'GHOST_X',text:'Anyone targeting Nairobi vault?',ts:Date.now()-120000},
+    {user:'CIPHER_9',text:'Already minted 3 devices',ts:Date.now()-60000},
+    {user:'ZERO_DAY',text:'ETA 45 min to launch window',ts:Date.now()-30000},
+  ])
+  const[input,setInput]=useState('')
+  const[newRoom,setNewRoom]=useState('')
+  const[showCreate,setShowCreate]=useState(false)
+  const[muteMic,setMuteMic]=useState(true)
+  const[muteSpeaker,setMuteSpeaker]=useState(false)
+  const[voiceConnected,setVoiceConnected]=useState(false)
+
+  const sendMsg=()=>{
+    if(!input.trim())return
+    setMsgs(m=>[...m,{user:nickname||'OPERATIVE',text:input.trim(),ts:Date.now()}])
+    setInput('')
+  }
+
+  const createRoom=()=>{
+    if(!newRoom.trim())return
+    const id=newRoom.toLowerCase().replace(/\s+/g,'-')
+    setRooms(r=>[...r,{id,name:newRoom.toUpperCase(),members:1,private:false,topic:'New room'}])
+    setActiveRoom(id)
+    setNewRoom('')
+    setShowCreate(false)
+  }
+
+  const fmtTs=(ts:number)=>{
+    const d=Math.floor((Date.now()-ts)/1000)
+    if(d<60)return d+'s ago'
+    if(d<3600)return Math.floor(d/60)+'m ago'
+    return Math.floor(d/3600)+'h ago'
+  }
+
+  return(
+    <div style={{flex:1,padding:20,display:'grid',gridTemplateColumns:'240px 1fr',gap:16,height:'calc(100vh - 160px)'}}>
+      {/* Left: rooms list */}
+      <div style={{display:'flex',flexDirection:'column',gap:10}}>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+          <span style={{fontSize:11,color:'#00e5a0',fontWeight:700}}>🌐 NETWORK ROOMS</span>
+          <button onClick={()=>setShowCreate(s=>!s)} style={{fontSize:9,padding:'4px 8px',background:'rgba(0,229,160,0.1)',border:'1px solid rgba(0,229,160,0.3)',color:'#00e5a0',cursor:'pointer'}}>+ NEW</button>
+        </div>
+        {showCreate&&<div style={{background:'#09141e',border:'1px solid rgba(0,229,160,0.3)',padding:10}}>
+          <input value={newRoom} onChange={e=>setNewRoom(e.target.value)} placeholder="Room name..." onKeyDown={e=>e.key==='Enter'&&createRoom()} style={{width:'100%',background:'transparent',border:'none',color:'#00e5a0',fontSize:10,outline:'none',marginBottom:6,boxSizing:'border-box'}}/>
+          <button onClick={createRoom} style={{width:'100%',padding:'5px',background:'linear-gradient(135deg,#00e5a0,#00b8ff)',color:'#000',border:'none',fontSize:9,fontWeight:700,cursor:'pointer'}}>CREATE ROOM</button>
+        </div>}
+        <div style={{display:'flex',flexDirection:'column',gap:6,flex:1,overflowY:'auto'}}>
+          {rooms.map(r=>(
+            <div key={r.id} onClick={()=>setActiveRoom(r.id)} style={{padding:'8px 10px',background:activeRoom===r.id?'rgba(0,229,160,0.08)':'rgba(0,0,0,0.3)',border:'1px solid '+(activeRoom===r.id?'rgba(0,229,160,0.4)':'rgba(63,73,83,0.3)'),cursor:'pointer',transition:'all 0.15s'}}>
+              <div style={{display:'flex',justifyContent:'space-between'}}>
+                <span style={{fontSize:10,color:activeRoom===r.id?'#00e5a0':'#dce6f3',fontWeight:700}}>{r.name}</span>
+                <span style={{fontSize:8,color:'#4a6a7a'}}>{r.members} online</span>
+              </div>
+              <div style={{fontSize:8,color:'#4a6a7a',marginTop:2}}>{r.topic}</div>
+            </div>
+          ))}
+        </div>
+        {/* Voice chat controls */}
+        <div style={{background:'#09141e',border:'1px solid rgba(63,73,83,0.2)',padding:10}}>
+          <div style={{fontSize:9,color:'#4a6a7a',marginBottom:8}}>🎙 VOICE COMMS</div>
+          <div style={{display:'flex',gap:6,marginBottom:8}}>
+            <button onClick={()=>setMuteMic(m=>!m)} style={{flex:1,padding:'6px 0',background:muteMic?'rgba(239,68,68,0.15)':'rgba(0,229,160,0.1)',border:'1px solid '+(muteMic?'rgba(239,68,68,0.4)':'rgba(0,229,160,0.3)'),color:muteMic?'#ef4444':'#00e5a0',fontSize:9,cursor:'pointer'}}>
+              {muteMic?'🎙 MUTED':'🎙 LIVE'}
+            </button>
+            <button onClick={()=>setMuteSpeaker(m=>!m)} style={{flex:1,padding:'6px 0',background:muteSpeaker?'rgba(239,68,68,0.15)':'rgba(0,229,160,0.1)',border:'1px solid '+(muteSpeaker?'rgba(239,68,68,0.4)':'rgba(0,229,160,0.3)'),color:muteSpeaker?'#ef4444':'#00e5a0',fontSize:9,cursor:'pointer'}}>
+              {muteSpeaker?'🔇 OFF':'🔊 ON'}
+            </button>
+          </div>
+          <button onClick={()=>setVoiceConnected(v=>!v)} style={{width:'100%',padding:'6px 0',background:voiceConnected?'rgba(239,68,68,0.15)':'rgba(0,229,160,0.1)',border:'1px solid '+(voiceConnected?'rgba(239,68,68,0.4)':'rgba(0,229,160,0.3)'),color:voiceConnected?'#ef4444':'#00e5a0',fontSize:9,fontWeight:700,cursor:'pointer'}}>
+            {voiceConnected?'📻 DISCONNECT':'📻 JOIN VOICE'}
+          </button>
+          {voiceConnected&&<div style={{marginTop:6,fontSize:8,color:'#00e5a0',animation:'ledBlink 1s infinite',textAlign:'center'}}>● CONNECTED — WALKIE TALKIE ACTIVE</div>}
+        </div>
+      </div>
+      {/* Right: chat */}
+      <div style={{display:'flex',flexDirection:'column',background:'#09141e',border:'1px solid rgba(63,73,83,0.2)'}}>
+        <div style={{padding:'10px 14px',borderBottom:'1px solid rgba(63,73,83,0.2)',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+          <span style={{fontSize:11,color:'#00e5a0',fontWeight:700}}>
+            {activeRoom?rooms.find(r=>r.id===activeRoom)?.name||activeRoom:'SELECT A ROOM'}
+          </span>
+          {activeRoom&&<span style={{fontSize:9,color:'#4a6a7a'}}>{rooms.find(r=>r.id===activeRoom)?.members} operatives online</span>}
+        </div>
+        <div style={{flex:1,overflowY:'auto',padding:12,display:'flex',flexDirection:'column',gap:8}}>
+          {activeRoom?msgs.map((m,i)=>(
+            <div key={i} style={{display:'flex',gap:8,alignItems:'flex-start'}}>
+              <div style={{width:24,height:24,background:'rgba(0,229,160,0.1)',border:'1px solid rgba(0,229,160,0.2)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:8,color:'#00e5a0',flexShrink:0}}>{m.user[0]}</div>
+              <div style={{flex:1}}>
+                <div style={{display:'flex',gap:6,alignItems:'center',marginBottom:2}}>
+                  <span style={{fontSize:9,color:'#00e5a0',fontWeight:700}}>{m.user}</span>
+                  <span style={{fontSize:8,color:'#2a5a7a'}}>{fmtTs(m.ts)}</span>
+                </div>
+                <div style={{fontSize:10,color:'#dce6f3'}}>{m.text}</div>
+              </div>
+            </div>
+          )):(
+            <div style={{flex:1,display:'flex',alignItems:'center',justifyContent:'center',color:'#2a5a7a',fontSize:10}}>Select a room to start chatting</div>
+          )}
+        </div>
+        {activeRoom&&<div style={{padding:10,borderTop:'1px solid rgba(63,73,83,0.2)',display:'flex',gap:8}}>
+          <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==='Enter'&&sendMsg()} placeholder="Message..." style={{flex:1,background:'rgba(0,0,0,0.4)',border:'1px solid rgba(63,73,83,0.3)',color:'#dce6f3',fontSize:10,padding:'6px 10px',outline:'none'}}/>
+          <button onClick={sendMsg} style={{padding:'6px 14px',background:'linear-gradient(135deg,#00e5a0,#00b8ff)',color:'#000',border:'none',fontSize:10,fontWeight:700,cursor:'pointer'}}>SEND</button>
+        </div>}
+      </div>
+    </div>
+  )
+}
+
 // ─── Main (wrapped with wallet providers) ─────────────────────────────────────
 export default function RansomeApp(){
   const network = WalletAdapterNetwork.Devnet
@@ -1434,6 +1637,7 @@ function Ransome(){
   const[showEndScreen,setShowEndScreen]=useState(false) // all bankrupts done
   const currentHour=new Date().getUTCHours()
   const liveBank=getLiveBank(currentHour)
+  const[navTab,setNavTab]=useState<'operative'|'missions'|'network'>('operative')
   const lobbyCountdown=useLobbyCountdown()           // 59-min cycle countdown
   const lobbyFill=Math.min(1-(lobbyCountdown/LOBBY_CYCLE),1)  // 0→1 as vault fills
   const onChainSession=useOnChainSession(phase==='game')  // poll on-chain state during game
@@ -1993,12 +2197,16 @@ function Ransome(){
             <div style={{width:32,height:32,background:'#13212c',border:'1px solid rgba(0,229,160,0.2)',display:'flex',alignItems:'center',justifyContent:'center'}}>🎭</div>
             <div><div style={{color:'#00e5a0',fontWeight:700,fontSize:10}}>OPERATIVE</div><div style={{color:'#4a6a7a',fontSize:9}}>{nickname.slice(0,10).toUpperCase()}</div></div>
           </div>
-          {(['OPERATIVE','MISSIONS','NETWORK'] as const).map((item,i)=>(<div key={item} style={{padding:'10px 16px',cursor:'pointer',color:i===0?'#00e5a0':'#4a6a7a',fontWeight:i===0?700:400,fontSize:11,borderRight:i===0?'2px solid #00e5a0':'none',background:i===0?'rgba(0,229,160,0.06)':'transparent'}}>{['🎯 ','📋 ','🌐 '][i]}{item}</div>))}
+          {(['OPERATIVE','MISSIONS','NETWORK'] as const).map((item,i)=>{
+            const tab=(['operative','missions','network'] as const)[i]
+            const active=navTab===tab
+            return(<div key={item} onClick={()=>setNavTab(tab)} style={{padding:'10px 16px',cursor:'pointer',color:active?'#00e5a0':'#4a6a7a',fontWeight:active?700:400,fontSize:11,borderRight:active?'2px solid #00e5a0':'none',background:active?'rgba(0,229,160,0.06)':'transparent',transition:'all 0.15s'}}>{['🎯 ','📋 ','🌐 '][i]}{item}</div>)
+          })}
           <div style={{marginTop:'auto',padding:'0 12px 16px'}}>
             {lobbyCountdown<=60&&devices.length>0?(<button onClick={enterGame} style={{width:'100%',padding:'8px 0',background:'linear-gradient(135deg,#ef4444,#dc2626)',color:'#fff',border:'none',fontSize:10,fontWeight:700,cursor:'pointer',animation:'ledBlink 0.6s infinite'}}>ENTER MATRIX</button>):(<div style={{padding:'8px',background:'rgba(0,229,160,0.06)',border:'1px solid rgba(0,229,160,0.2)',color:'#00e5a0',fontSize:9,textAlign:'center'}}>INITIALIZE_HEIST</div>)}
           </div>
         </div>
-        <div style={{flex:1,padding:20,display:'grid',gridTemplateColumns:'1fr 300px',gap:16,alignItems:'start'}}>
+        {navTab==='operative'&&<div style={{flex:1,padding:20,display:'grid',gridTemplateColumns:'1fr 300px',gap:16,alignItems:'start'}}>
           <div style={{display:'flex',flexDirection:'column',gap:14}}>
             <div style={{background:'rgba(239,68,68,0.06)',border:'1px solid rgba(239,68,68,0.2)',padding:'10px 14px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
               <div><div style={{fontSize:8,color:'#ef4444',marginBottom:2}}>🔴 LIVE NOW</div><div style={{fontSize:20,fontWeight:800,color:'#fff'}}>{BANKS[liveBank].name}</div><div style={{fontSize:8,color:'#2a5a7a'}}>{BANKS[liveBank].city} · {BANKS[liveBank].vault}</div></div>
@@ -2041,6 +2249,9 @@ function Ransome(){
             {lobbyCountdown<=60&&devices.length>0&&(<button onClick={enterGame} style={{width:'100%',padding:'9px 0',background:'linear-gradient(135deg,#ef4444,#dc2626)',color:'#fff',border:'none',fontSize:10,fontWeight:700,cursor:'pointer',animation:'ledBlink 0.6s infinite'}}>🚀 ENTER HACK MATRIX</button>)}
             {lobbyCountdown>60&&devices.length>0&&(<div style={{textAlign:'center',fontSize:8,color:'#1e4a6a'}}>Entry in {fmtTime(lobbyCountdown-60)}</div>)}
           </div>
+        </div>}
+        {navTab==='missions'&&<MissionsDemo/>}
+        {navTab==='network'&&<NetworkHub nickname={nickname} wallet={wallet}/>}          </div>
         </div>
       </div>
       <div style={{position:'fixed',bottom:0,left:0,width:'100%',zIndex:50,height:28,display:'flex',justifyContent:'space-between',alignItems:'center',padding:'0 16px',background:'#000',borderTop:'1px solid rgba(0,229,160,0.15)',boxSizing:'border-box'}}>
