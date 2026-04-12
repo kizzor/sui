@@ -1974,149 +1974,80 @@ function Ransome(){
 
   // ── LOBBY ─────────────────────────────────────────────────────────────────
   if(phase==='lobby')return(
-    <div style={{minHeight:'100vh',background:'linear-gradient(180deg,#010810,#020d1a)',color:'#c8d8e8',padding:'16px 14px',boxSizing:'border-box'}}>
-      {/* Header */}
-      <div style={{display:'flex',alignItems:'center',marginBottom:16,gap:10}}>
-        <div style={{flexShrink:0}}>
-          <div style={{fontFamily:'Syne,sans-serif',fontSize:clamp(22,4,'vw'),fontWeight:800,color:'#00e5a0',textShadow:'0 0 20px #00e5a060'}}>RANSOME</div>
-          <div style={{fontFamily:'DM Mono,monospace',fontSize:'clamp(7px,1.8vw,9px)',color:'#2a5a7a',letterSpacing:'0.15em'}}>HACK THE BANKS</div>
+    <div style={{minHeight:'100vh',background:'#050f17',color:'#dce6f3',overflow:'hidden'}}>
+      <div style={{position:'fixed',top:0,left:0,width:'100%',zIndex:50,height:56,display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0 24px',background:'rgba(5,10,23,0.9)',borderBottom:'1px solid rgba(0,229,160,0.1)',boxSizing:'border-box'}}>
+        <div style={{display:'flex',alignItems:'center',gap:20}}>
+          <span style={{fontSize:20,fontWeight:800,color:'#00e5a0'}}>RANSOME</span>
+          <span style={{fontSize:10,color:'#00e5a0',borderBottom:'2px solid #00e5a0',paddingBottom:2}}>NETWORK: ONLINE</span>
+          <span style={{fontSize:10,color:'rgba(0,229,160,0.35)'}}>ENCRYPTION: AES-256</span>
         </div>
-        <div style={{flex:1,height:40,background:'rgba(0,229,160,0.02)',border:'1px dashed #0a2535',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center',margin:'0 8px'}}>
-          <span style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#0a2535'}}>AD SPACE</span>
+        <div style={{display:'flex',gap:10,alignItems:'center'}}>
+          <div style={{background:'rgba(24,39,51,0.5)',padding:'4px 10px',border:'1px solid rgba(47,243,173,0.2)',fontSize:12,color:'#00e5a0',fontWeight:700}}>{fmtTime(lobbyCountdown)}</div>
+          <div style={{fontSize:10,color:'#4a7fa5',background:'#0a1628',border:'1px solid #1e3a5f',borderRadius:6,padding:'4px 8px'}}>👤 {nickname}</div>
+          {wallet?(<div style={{display:'flex',gap:6}}><div style={{background:'#0a1628',border:'1px solid rgba(0,229,160,0.25)',borderRadius:6,padding:'4px 8px',fontSize:9,color:'#00e5a0'}}>{wallet.slice(0,6)}…{wallet.slice(-4)}</div><button onClick={()=>disconnect()} style={{background:'rgba(239,68,68,0.08)',border:'1px solid rgba(239,68,68,0.25)',borderRadius:6,padding:'4px 8px',fontSize:9,color:'#ef4444',cursor:'pointer'}}>✕</button></div>):(<WalletMultiButton style={{background:'linear-gradient(135deg,#00e5a0,#00b8ff)',color:'#000',borderRadius:6,fontSize:10,fontWeight:700,height:'auto',padding:'6px 12px'}}/>)}
         </div>
-        <div style={{display:'flex',gap:6,alignItems:'center',flexShrink:0}}>
-          <div style={{fontFamily:'DM Mono,monospace',fontSize:'clamp(7px,1.8vw,9px)',color:'#4a7fa5',background:'#0a1628',border:'1px solid #1e3a5f',borderRadius:8,padding:'5px 8px'}}>👤 {nickname}</div>
-          {wallet?(
-            <div style={{display:'flex',alignItems:'center',gap:4}}>
-              <div style={{background:'#0a1628',border:'1px solid #00e5a040',borderRadius:8,padding:'5px 9px',fontFamily:'DM Mono,monospace',fontSize:'clamp(7px,1.6vw,9px)',color:'#00e5a0',display:'flex',alignItems:'center',gap:5}}>
-                <div style={{width:5,height:5,borderRadius:'50%',background:'#22c55e',flexShrink:0}}/>
-                {wallet}
+      </div>
+      <div style={{display:'flex',paddingTop:56}}>
+        <div style={{width:200,minHeight:'calc(100vh - 56px)',background:'#09141e',borderRight:'1px solid rgba(0,229,160,0.08)',display:'flex',flexDirection:'column',padding:'16px 0',flexShrink:0}}>
+          <div style={{padding:'0 16px 16px',display:'flex',gap:8,alignItems:'center'}}>
+            <div style={{width:32,height:32,background:'#13212c',border:'1px solid rgba(0,229,160,0.2)',display:'flex',alignItems:'center',justifyContent:'center'}}>🎭</div>
+            <div><div style={{color:'#00e5a0',fontWeight:700,fontSize:10}}>OPERATIVE</div><div style={{color:'#4a6a7a',fontSize:9}}>{nickname.slice(0,10).toUpperCase()}</div></div>
+          </div>
+          {(['OPERATIVE','MISSIONS','NETWORK'] as const).map((item,i)=>(<div key={item} style={{padding:'10px 16px',cursor:'pointer',color:i===0?'#00e5a0':'#4a6a7a',fontWeight:i===0?700:400,fontSize:11,borderRight:i===0?'2px solid #00e5a0':'none',background:i===0?'rgba(0,229,160,0.06)':'transparent'}}>{['🎯 ','📋 ','🌐 '][i]}{item}</div>))}
+          <div style={{marginTop:'auto',padding:'0 12px 16px'}}>
+            {lobbyCountdown<=60&&devices.length>0?(<button onClick={enterGame} style={{width:'100%',padding:'8px 0',background:'linear-gradient(135deg,#ef4444,#dc2626)',color:'#fff',border:'none',fontSize:10,fontWeight:700,cursor:'pointer',animation:'ledBlink 0.6s infinite'}}>ENTER MATRIX</button>):(<div style={{padding:'8px',background:'rgba(0,229,160,0.06)',border:'1px solid rgba(0,229,160,0.2)',color:'#00e5a0',fontSize:9,textAlign:'center'}}>INITIALIZE_HEIST</div>)}
+          </div>
+        </div>
+        <div style={{flex:1,padding:20,display:'grid',gridTemplateColumns:'1fr 300px',gap:16,alignItems:'start'}}>
+          <div style={{display:'flex',flexDirection:'column',gap:14}}>
+            <div style={{background:'rgba(239,68,68,0.06)',border:'1px solid rgba(239,68,68,0.2)',padding:'10px 14px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+              <div><div style={{fontSize:8,color:'#ef4444',marginBottom:2}}>🔴 LIVE NOW</div><div style={{fontSize:20,fontWeight:800,color:'#fff'}}>{BANKS[liveBank].name}</div><div style={{fontSize:8,color:'#2a5a7a'}}>{BANKS[liveBank].city} · {BANKS[liveBank].vault}</div></div>
+              <div style={{textAlign:'right'}}><div style={{fontSize:22,fontWeight:800,color:'#00e5a0'}}>$1,000,000</div><div style={{fontSize:9,color:lobbyCountdown<=60?'#ef4444':'#2a5a7a',fontWeight:700}}>{lobbyCountdown<=60?'🚀 LAUNCHING':'NEXT: '+fmtTime(lobbyCountdown)}</div></div>
+            </div>
+            <div style={{position:'relative',background:'#09141e',border:'1px solid rgba(63,73,83,0.3)'}}>
+              <div style={{position:'absolute',top:0,left:0,width:12,height:12,borderTop:'2px solid rgba(0,229,160,0.5)',borderLeft:'2px solid rgba(0,229,160,0.5)',zIndex:3}}/>
+              <div style={{position:'absolute',top:0,right:0,width:12,height:12,borderTop:'2px solid rgba(0,229,160,0.5)',borderRight:'2px solid rgba(0,229,160,0.5)',zIndex:3}}/>
+              <div style={{position:'absolute',bottom:0,left:0,width:12,height:12,borderBottom:'2px solid rgba(0,229,160,0.5)',borderLeft:'2px solid rgba(0,229,160,0.5)',zIndex:3}}/>
+              <div style={{position:'absolute',bottom:0,right:0,width:12,height:12,borderBottom:'2px solid rgba(0,229,160,0.5)',borderRight:'2px solid rgba(0,229,160,0.5)',zIndex:3}}/>
+              <WorldMapSketch currentHour={currentHour} onSelectBank={setSelectedBank}/>
+              {selectedBank!==null&&(<div style={{padding:'8px 12px',display:'flex',justifyContent:'space-between',borderTop:'1px solid #0a2535'}}><div style={{fontSize:10,color:'#00e5a0',fontWeight:700}}>{BANKS[selectedBank].name}</div><div style={{fontSize:9,color:selectedBank===liveBank?'#22c55e':'#1e4a6a'}}>{selectedBank===liveBank?'🟢 LIVE':'SCHEDULED'}</div></div>)}
+            </div>
+            <div style={{background:'#0e1b25',border:'1px solid rgba(63,73,83,0.2)',padding:16}}>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:14}}><span style={{fontSize:14,fontWeight:700,color:'#dce6f3'}}>💻 MINT_TERMINAL</span><span style={{fontSize:9,color:'#4a6a7a'}}>READY</span></div>
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:12,alignItems:'end'}}>
+                <div><div style={{fontSize:9,color:'#4a6a7a',marginBottom:4}}>QTY</div><div style={{display:'flex',gap:3}}>{[1,3,5,10].map(n=>(<button key={n} onClick={()=>setMintCount(n)} style={{flex:1,padding:'7px 0',background:mintCount===n?'rgba(0,229,160,0.15)':'rgba(0,0,0,0.3)',border:'1px solid '+(mintCount===n?'rgba(0,229,160,0.5)':'rgba(63,73,83,0.3)'),color:mintCount===n?'#00e5a0':'#4a6a7a',fontSize:10,fontWeight:700,cursor:'pointer'}}>{n}</button>))}</div></div>
+                <div><div style={{fontSize:9,color:'#4a6a7a',marginBottom:4}}>TOKEN</div><div style={{display:'flex',gap:3}}>{['SOL','USDT','RNSM'].map(t=>(<button key={t} onClick={()=>setMintToken(t)} style={{flex:1,padding:'7px 3px',background:mintToken===t?'rgba(0,229,160,0.15)':'rgba(0,0,0,0.3)',border:'1px solid '+(mintToken===t?'rgba(0,229,160,0.5)':'rgba(63,73,83,0.3)'),color:mintToken===t?'#00e5a0':'#4a6a7a',fontSize:9,fontWeight:700,cursor:'pointer'}}>{t}</button>))}</div></div>
+                <div>{wallet?(<button onClick={mintDevices} style={{width:'100%',padding:'9px 0',background:'linear-gradient(135deg,#00e5a0,#00b8ff)',color:'#000',border:'none',fontSize:11,fontWeight:700,cursor:'pointer'}}>MINT →</button>):(<WalletMultiButton style={{width:'100%',background:'linear-gradient(135deg,#00e5a0,#00b8ff)',color:'#000',borderRadius:0,fontSize:10,fontWeight:700,height:'auto',padding:'9px 0'}}/>)}</div>
               </div>
-              <button onClick={()=>disconnect()} style={{background:'rgba(239,68,68,0.08)',border:'1px solid rgba(239,68,68,0.25)',borderRadius:8,padding:'5px 8px',fontFamily:'DM Mono,monospace',fontSize:'clamp(7px,1.6vw,8px)',color:'#ef4444',cursor:'pointer',whiteSpace:'nowrap'}}>
-                ✕ DISCONNECT
-              </button>
             </div>
-          ):(
-            <WalletMultiButton style={{background:'linear-gradient(135deg,#00e5a0,#00b8ff)',color:'#000',borderRadius:8,fontFamily:'DM Mono,monospace',fontSize:'clamp(8px,1.8vw,10px)',fontWeight:700,height:'auto',padding:'6px 12px'}}/>
-          )}
-        </div>
-      </div>
-
-      {/* Live bank pill */}
-      <div style={{background:'rgba(239,68,68,0.08)',border:'1px solid rgba(239,68,68,0.2)',borderRadius:12,padding:'10px 14px',marginBottom:14,display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:8}}>
-        <div>
-          <div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#ef4444',letterSpacing:'0.12em',marginBottom:2}}>🔴 LIVE NOW</div>
-          <div style={{fontFamily:'Syne,sans-serif',fontSize:'clamp(14px,4vw,20px)',fontWeight:800,color:'#fff'}}>{BANKS[liveBank].name}</div>
-          <div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#2a5a7a'}}>{BANKS[liveBank].city} · {BANKS[liveBank].vault}</div>
-        </div>
-        <div style={{textAlign:'right'}}>
-          <div style={{fontFamily:'Syne,sans-serif',fontSize:'clamp(16px,4vw,22px)',fontWeight:800,color:'#00e5a0'}}>$1,000,000</div>
-          <div style={{fontFamily:'DM Mono,monospace',fontSize:9,color:lobbyCountdown<=60?'#ef4444':'#2a5a7a',fontWeight:700}}>
-            {lobbyCountdown<=60?'🚀 LAUNCHING NOW':`NEXT BATCH: ${fmtTime(lobbyCountdown)}`}
+            <div><div style={{fontSize:8,color:'#1e4a6a',marginBottom:6}}>💬 LOBBY CHAT</div><ChatTerminal nickname={nickname}/></div>
+          </div>
+          <div style={{background:'#09141e',border:'1px solid rgba(63,73,83,0.2)',padding:16,display:'flex',flexDirection:'column',gap:12}}>
+            <div style={{display:'flex',gap:8,alignItems:'center'}}><span style={{fontSize:14}}>💎</span><span style={{fontSize:14,fontWeight:700,color:'#dce6f3'}}>VAULT_STATUS</span></div>
+            <div style={{position:'relative',background:'#050f17',border:'1px solid rgba(63,73,83,0.15)',minHeight:180}}>
+              <div style={{position:'absolute',bottom:0,left:0,width:'100%',height:(lobbyFill*100)+'%',background:'linear-gradient(180deg,#2ff3ad,#00658e)',opacity:0.2,transition:'height 1s linear'}}/>
+              <VaultSketch pct={lobbyFill} paid={Math.round(lobbyFill*1000000)}/>
+            </div>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:6}}>
+              <div style={{textAlign:'center'}}><div style={{fontSize:8,color:'#4a6a7a'}}>Operatives</div><div style={{fontSize:18,fontWeight:700,color:'#00e5a0'}}>2,104</div></div>
+              <div style={{textAlign:'center'}}><div style={{fontSize:8,color:'#4a6a7a'}}>Success</div><div style={{fontSize:18,fontWeight:700,color:'#00b6fd'}}>92.4%</div></div>
+            </div>
+            {[{l:'LAST BREACH',v:'+450 SOL',c:'#00e5a0'},{l:'STABILITY',v:'OPTIMAL',c:'#00b6fd'},{l:'THREAT',v:'LOW',c:'#ff6daf'}].map(r=>(<div key={r.l} style={{display:'flex',justifyContent:'space-between',padding:'6px 8px',background:'#13212c',borderLeft:'2px solid '+r.c}}><span style={{fontSize:8,color:'#4a6a7a'}}>{r.l}</span><span style={{fontSize:9,color:r.c,fontWeight:700}}>{r.v}</span></div>))}
+            <div style={{textAlign:'center',padding:'8px',background:'rgba(0,0,0,0.3)',border:'1px solid '+(lobbyCountdown<=60?'rgba(239,68,68,0.4)':'rgba(10,58,90,0.6)'),animation:lobbyCountdown<=60?'ledBlink 0.8s infinite':'none'}}>
+              <div style={{fontSize:8,color:lobbyCountdown<=60?'#ef4444':'#2a5a7a',marginBottom:2}}>{lobbyCountdown<=60?'🚀 LAUNCHING':'⏳ NEXT BATCH'}</div>
+              <div style={{fontSize:26,fontWeight:800,color:lobbyCountdown<=60?'#ef4444':'#fff'}}>{fmtTime(lobbyCountdown)}</div>
+            </div>
+            <div style={{textAlign:'center',fontSize:8,color:'#1e4a6a'}}>{devices.length>0?(<span style={{color:'#00e5a0'}}>⚡ {devices.length} DEVICE{devices.length>1?'S':''} READY</span>):(<span>MINT TO JOIN</span>)}</div>
+            {lobbyCountdown<=60&&devices.length>0&&(<button onClick={enterGame} style={{width:'100%',padding:'9px 0',background:'linear-gradient(135deg,#ef4444,#dc2626)',color:'#fff',border:'none',fontSize:10,fontWeight:700,cursor:'pointer',animation:'ledBlink 0.6s infinite'}}>🚀 ENTER HACK MATRIX</button>)}
+            {lobbyCountdown>60&&devices.length>0&&(<div style={{textAlign:'center',fontSize:8,color:'#1e4a6a'}}>Entry in {fmtTime(lobbyCountdown-60)}</div>)}
           </div>
         </div>
       </div>
-
-      {/* Main layout: 3-col on wide, stacked on mobile */}
-      <div style={{display:'grid',gridTemplateColumns:'minmax(0,1fr) minmax(0,200px) minmax(0,300px)',gap:14,marginBottom:14,alignItems:'start'}} className="lobby-grid">
-        {/* Col 1: World map */}
-        <div>
-          <div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#1e4a6a',letterSpacing:'0.1em',marginBottom:6}}>⬡ GLOBAL BANK NETWORK — 23 BANKS · 59 MIN CYCLES</div>
-          <WorldMapSketch currentHour={currentHour} onSelectBank={setSelectedBank}/>
-          {selectedBank!==null&&(
-            <div style={{marginTop:8,background:'#020d1a',border:'1px solid #0a2535',borderRadius:8,padding:'8px 12px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-              <div>
-                <div style={{fontFamily:'DM Mono,monospace',fontSize:9,color:'#00e5a0',fontWeight:700}}>{BANKS[selectedBank].name}</div>
-                <div style={{fontFamily:'DM Mono,monospace',fontSize:7.5,color:'#2a5a7a'}}>{BANKS[selectedBank].city} · {BANKS[selectedBank].region} · {BANKS[selectedBank].vault}</div>
-              </div>
-              <div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:selectedBank===liveBank?'#22c55e':'#1e4a6a'}}>{selectedBank===liveBank?'🟢 LIVE':`UTC${BANKS[selectedBank].tz>=0?'+':''}${BANKS[selectedBank].tz}`}</div>
-            </div>
-          )}
-        </div>
-
-        {/* Col 2: LOBBY VAULT — accumulating ransom funds */}
-        <div style={{background:'#020d1a',border:'2px solid #0a3a5a',borderRadius:14,padding:'12px 10px',display:'flex',flexDirection:'column',gap:8,alignItems:'center'}}>
-          <div style={{fontFamily:'DM Mono,monospace',fontSize:7,color:'#2a5a7a',letterSpacing:'0.12em',textAlign:'center'}}>
-            🏦 NEXT VAULT
-          </div>
-          {/* Vault fill indicator */}
-          <div style={{position:'relative',width:'100%'}}>
-            <VaultSketch pct={lobbyFill} paid={Math.round(lobbyFill*1000000)}/>
-          </div>
-          {/* Accumulation bar */}
-          <div style={{width:'100%',background:'#0a1628',borderRadius:3,overflow:'hidden',height:6,border:'1px solid #0d2035'}}>
-            <div style={{height:'100%',width:`${lobbyFill*100}%`,
-              background:`linear-gradient(90deg,#00e5a0,${lobbyFill>0.8?'#ef4444':'#00b8ff'})`,
-              borderRadius:3,transition:'width 1s linear',
-              boxShadow:`0 0 ${Math.round(lobbyFill*12)}px rgba(0,229,160,${(lobbyFill*0.7).toFixed(2)})`}}/>
-          </div>
-          {/* Vault amount accumulating */}
-          <div style={{textAlign:'center'}}>
-            <div style={{fontFamily:'Syne,sans-serif',fontSize:18,fontWeight:800,
-              color:lobbyFill>0.8?'#ef4444':'#00e5a0',
-              textShadow:`0 0 16px ${lobbyFill>0.8?'#ef4444':'#00e5a0'}60`}}>
-              ${Math.round(lobbyFill*1000000).toLocaleString()}
-            </div>
-            <div style={{fontFamily:'DM Mono,monospace',fontSize:6,color:'#1e4a6a',marginTop:1}}>
-              ACCUMULATING
-            </div>
-          </div>
-          {/* Countdown to next batch */}
-          <div style={{width:'100%',background:'rgba(0,0,0,0.3)',borderRadius:8,padding:'6px 10px',textAlign:'center',
-            border:`1px solid ${lobbyCountdown<=60?'rgba(239,68,68,0.4)':'rgba(10,58,90,0.8)'}`,
-            animation:lobbyCountdown<=60?'ledBlink 0.8s infinite':'none'}}>
-            <div style={{fontFamily:'DM Mono,monospace',fontSize:7,color:lobbyCountdown<=60?'#ef4444':'#2a5a7a',marginBottom:2}}>
-              {lobbyCountdown<=60?'🚀 BATCH LAUNCHING':'⏳ NEXT BATCH'}
-            </div>
-            <div style={{fontFamily:'Syne,sans-serif',fontSize:22,fontWeight:800,
-              color:lobbyCountdown<=60?'#ef4444':'#fff',
-              textShadow:lobbyCountdown<=60?'0 0 20px #ef4444':'none'}}>
-              {fmtTime(lobbyCountdown)}
-            </div>
-          </div>
-          {/* Device count */}
-          <div style={{fontFamily:'DM Mono,monospace',fontSize:6.5,color:'#1e4a6a',textAlign:'center'}}>
-            {devices.length>0?(
-              <span style={{color:'#00e5a0'}}>⚡ {devices.length} DEVICE{devices.length>1?'S':''} READY</span>
-            ):(
-              <span>MINT DEVICES TO JOIN →</span>
-            )}
-          </div>
-          {/* Enter game button — only in final 60s window */}
-          {lobbyCountdown<=60&&devices.length>0&&(
-            <button onClick={enterGame} style={{
-              width:'100%',background:'linear-gradient(135deg,#ef4444,#dc2626)',
-              color:'#fff',border:'none',borderRadius:8,padding:'7px 0',
-              fontFamily:'DM Mono,monospace',fontSize:8,fontWeight:700,cursor:'pointer',
-              boxShadow:'0 0 16px rgba(239,68,68,0.4)',animation:'ledBlink 0.6s infinite'}}>
-              🚀 ENTER HACK MATRIX
-            </button>
-          )}
-          {lobbyCountdown>60&&devices.length>0&&(
-            <div style={{fontFamily:'DM Mono,monospace',fontSize:6,color:'#1e4a6a',textAlign:'center'}}>
-              Entry opens in {fmtTime(lobbyCountdown-60)}
-            </div>
-          )}
-        </div>
-
-        {/* Col 3: Device skeleton with Mint/Demo/Rules */}
-        <DeviceSkeleton title="RNSM-MINT-01">
-          <MintPanel wallet={wallet} devices={devices} mintCount={mintCount} mintToken={mintToken}
-            setMintCount={setMintCount} setMintToken={setMintToken}
-            onMint={mintDevices} onEnterGame={enterGame} onConnectWallet={()=>{}}/>
-        </DeviceSkeleton>
+      <div style={{position:'fixed',bottom:0,left:0,width:'100%',zIndex:50,height:28,display:'flex',justifyContent:'space-between',alignItems:'center',padding:'0 16px',background:'#000',borderTop:'1px solid rgba(0,229,160,0.15)',boxSizing:'border-box'}}>
+        <span style={{fontSize:9,color:'rgba(0,229,160,0.6)'}}>SYSTEM_BREACH_LOGS v2.4.0 · ACCESSING_NODE_01...</span>
+        <div style={{display:'flex',gap:6,alignItems:'center'}}><div style={{width:6,height:6,borderRadius:'50%',background:'#00e5a0',animation:'ledBlink 2s infinite'}}/><span style={{fontSize:9,color:'#00e5a0'}}>SECURE_TUNNEL_ACTIVE</span></div>
       </div>
-
-      {/* Lobby chat — shared with all users */}
-      <div style={{marginBottom:14}}>
-        <div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'#1e4a6a',letterSpacing:'0.1em',marginBottom:6}}>
-          💬 LOBBY CHAT — visible to all agents
-        </div>
-        <ChatTerminal nickname={nickname}/>
-      </div>
-
-      {/* ── End Screen Overlay ─────────────────────────────────────── */}
-      {showEndScreen&&(
+            {showEndScreen&&(
         <div style={{position:'fixed',inset:0,background:'rgba(1,8,16,0.96)',zIndex:200,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:16,padding:20}}>
           <div style={{fontFamily:'Syne,sans-serif',fontSize:28,fontWeight:800,color:'#00e5a0',textShadow:'0 0 30px #00e5a080',textAlign:'center'}}>
             {bankruptCount>=3?'🏆 ALL RANSOMS CLAIMED':'🚨 VAULT HIJACKED'}
