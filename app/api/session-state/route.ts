@@ -6,10 +6,12 @@ import { NextResponse } from 'next/server'
 export async function GET() {
   try {
     const { Connection, PublicKey } = await import('@solana/web3.js')
+    const authStr = process.env.SESSION_AUTHORITY || 'jwuKUJaDZDP1zPqrYhTshc5kQswoRNK2YMZw5cokcAR'
+    if (!authStr || !/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(authStr)) {
+      return NextResponse.json({ ok: false, msg: 'No valid session authority configured' })
+    }
     const PROGRAM_ID = new PublicKey('5ZFVc4h5Z6ccuxCRNM1Ubr1LC5cv6bvPugYFMJMgRU31')
-    const SESSION_AUTH = new PublicKey(
-      process.env.SESSION_AUTHORITY || 'jwuKUJaDZDP1zPqrYhTshc5kQswoRNK2YMZw5cokcAR'
-    )
+    const SESSION_AUTH = new PublicKey(authStr)
     const [sessionKey] = PublicKey.findProgramAddressSync(
       [Buffer.from('session'), SESSION_AUTH.toBuffer()], PROGRAM_ID
     )
@@ -18,7 +20,6 @@ export async function GET() {
     if (!info) return NextResponse.json({ ok: false, msg: 'No session' })
 
     const data = info.data
-    // Stripped session offsets (win_claimers/pregame_at removed)
     const vaultTotal    = Number(data.readBigUInt64LE(74))
     const vaultPaid     = Number(data.readBigUInt64LE(82))
     const drawCount     = data[181]
@@ -36,6 +37,7 @@ export async function GET() {
       ts: Date.now()
     })
   } catch (e: any) {
-    return NextResponse.json({ ok: false, error: String(e?.message || e) }, { status: 500 })
+    console.error('Session state error:', e.message)
+    return NextResponse.json({ ok: false, error: 'Session unavailable' }, { status: 500 })
   }
 }

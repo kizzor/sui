@@ -40,7 +40,8 @@ export async function GET(req: Request) {
       return NextResponse.json({ ok: false, msg: 'Session not active' })
     }
 
-    const disc = Buffer.from([52, 82, 15, 76, 74, 208, 200, 63])
+    // Correct discriminator for draw_number instruction
+    const disc = Buffer.from([144, 134, 159, 234, 135, 217, 134, 239])
 
     const ix = new TransactionInstruction({
       programId: PROGRAM_ID,
@@ -68,6 +69,8 @@ export async function GET(req: Request) {
     return NextResponse.json({ ok: true, sig: sig.slice(0,16)+'...', number: lastNum, drawCount, ts: Date.now() })
 
   } catch (e: any) {
-    return NextResponse.json({ ok: false, error: String(e?.message || e) }, { status: 500 })
+    // Sanitize error - don't leak internal details
+    console.error('Draw error:', e)
+    return NextResponse.json({ ok: false, error: 'Draw failed' }, { status: 500 })
   }
 }

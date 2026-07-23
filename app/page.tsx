@@ -2,10 +2,15 @@
 import './globals.css'
 import '@solana/wallet-adapter-react-ui/styles.css'
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
-import { ConnectionProvider, WalletProvider, useWallet } from '@solana/wallet-adapter-react'
+import { ConnectionProvider, WalletProvider, useWallet, useConnection } from '@solana/wallet-adapter-react'
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base'
 import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets'
 import { WalletModalProvider, WalletMultiButton } from '@solana/wallet-adapter-react-ui'
+// SUI imports
+import { SuiJsonRpcClient, getJsonRpcFullnodeUrl } from '@mysten/sui/jsonRpc'
+import { Transaction } from '@mysten/sui/transactions'
+import { getWallets } from '@wallet-standard/app'
+import { isWalletWithRequiredFeatureSet } from '@mysten/wallet-standard'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Cell = { num:number|null; matched:boolean; clicked:boolean; missed:boolean }
@@ -22,6 +27,9 @@ function saveState(data:object){try{localStorage.setItem(STORAGE_KEY,JSON.string
 function loadState():any{try{const s=localStorage.getItem(STORAGE_KEY);return s?JSON.parse(s):null}catch{return null}}
 
 // ─── Constants ────────────────────────────────────────────────────────────────
+// ⚠️ DEV MODE — Set to false before mainnet deployment
+const DEV_MODE = true
+// ──────────────────────────────────────────────────────────────────────────────
 const WIN_LABELS:Record<WinType,string> = {
   EARLY_FIVE:'5 Digit Accounts Hacked', TOP_LINE:'Top Accounts Hacked',
   MIDDLE_LINE:'Central System Hacked',  BOTTOM_LINE:'Basement Hacked',
@@ -117,6 +125,7 @@ function useHourCountdown(){
 const LOBBY_CYCLE=59*60
 function useLobbyCountdown(){
   const get=()=>{
+    if(DEV_MODE)return 0 // Skip countdown in dev mode
     const now=new Date()
     const elapsed=now.getUTCHours()*3600+now.getUTCMinutes()*60+now.getUTCSeconds()
     return LOBBY_CYCLE-(elapsed%LOBBY_CYCLE)
@@ -1587,7 +1596,7 @@ function NetworkHub({nickname,wallet}:{nickname:string;wallet:string|null}){
 // ─── Main (wrapped with wallet providers) ─────────────────────────────────────
 export default function RansomeApp(){
   const network = WalletAdapterNetwork.Devnet
-  const endpoint = 'https://api.devnet.solana.com'
+  const endpoint = process.env.NEXT_PUBLIC_RPC_URL || 'https://api.devnet.solana.com'
   const wallets = useMemo(()=>[new PhantomWalletAdapter(), new SolflareWalletAdapter()],[])
   return(
     <ConnectionProvider endpoint={endpoint}>
@@ -1601,11 +1610,30 @@ export default function RansomeApp(){
 }
 
 function Ransome(){
-  const { publicKey, disconnect, connected } = useWallet()
+  const { publicKey, disconnect, connected, sendTransaction } = useWallet()
+  const { connection: solanaConnection } = useConnection()
+
+  // ─── On-chain constants ────────────────────────────────────────────────
+  const PROGRAM_ID_STR = '5ZFVc4h5Z6ccuxCRNM1Ubr1LC5cv6bvPugYFMJMgRU31'
+  const SESSION_AUTH_STR = publicKey?.toBase58() || ''
+  const WIN_TYPE_INDEX: Record<string, number> = {
+    EARLY_FIVE: 0, TOP_LINE: 1, MIDDLE_LINE: 2, BOTTOM_LINE: 3,
+    FULL_HOUSE_1: 4, FULL_HOUSE_2: 5, FULL_HOUSE_3: 6,
+  }
+  // ─── Chain selection (solana | sui) ─────────────────────────────────────
+  const[chain,setChain]=useState<'solana'|'sui'>('sui')
+  // SUI state
+  const[suiAddress,setSuiAddress]=useState<string|null>(null)
+  const[suiConnected,setSuiConnected]=useState(false)
+  const[suiWalletRef,setSuiWalletRef]=useState<any>(null) // stored wallet object for signing
+  const SUI_PROGRAM_ID='0x1b619b460ec98c6c531ed7084d1dff3d786f66bc02e3969cc95e68de6095ce30'
+  const DEVICE_PRICE_SUI=500_000_000 // 0.5 SUI in MIST
+  const suiClient=useMemo(()=>new SuiJsonRpcClient({network:'testnet'}),[])
+  const SESSION_OBJECT_ID='0xde3f711f9e35d967f4d61fe3098d7bcacf4d043ddb92c6e0c50e534888b92d9f'
+  // Unified wallet address
+  const wallet = chain==='solana' && connected && publicKey ? publicKey.toBase58() : chain==='sui' && suiConnected ? suiAddress : null
   const[phase,setPhase]=useState<string>('setup')
   const[nickname,setNickname]=useState('')
-  // wallet derived from real Phantom/Solflare connection
-  const wallet = connected && publicKey ? publicKey.toBase58() : null
   const[devices,setDevices]=useState<Device[]>([])
   const[calledNums,setCalledNums]=useState<Set<number>>(new Set())
   const[calledOrder,setCalledOrder]=useState<number[]>([])
@@ -1635,6 +1663,7 @@ function Ransome(){
   const sessionTimerRef=useRef<ReturnType<typeof setInterval>|null>(null)
   const[sessionSecs,setSessionSecs]=useState(0) // elapsed seconds this session
   const[showEndScreen,setShowEndScreen]=useState(false) // all bankrupts done
+  const[walletDebug,setWalletDebug]=useState<string[]>([]) // wallet detection debug logs
   const currentHour=new Date().getUTCHours()
   const liveBank=getLiveBank(currentHour)
   const[navTab,setNavTab]=useState<'operative'|'missions'|'network'>('operative')
@@ -1712,6 +1741,30 @@ function Ransome(){
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
+
+  // Auto-detect SUI wallet on mount — catches Slush when it registers late
+  useEffect(()=>{
+    if(chain!=='sui'||suiConnected)return
+    try{
+      const walletsApi=getWallets()
+      const filterSui=(w:any)=>isWalletWithRequiredFeatureSet(w,['standard:connect','sui:signAndExecuteTransaction'])
+        ||(w.chains?.some((c:string)=>c.startsWith('sui:'))&&w.features?.['standard:connect'])
+      // Check immediately
+      const all=walletsApi.get()
+      const sui=all.filter(filterSui)
+      if(sui.length>0&&!suiConnected){
+        console.log(`[SUI Auto] Found ${sui.length} SUI wallet(s) on mount: ${sui.map((w:any)=>w.name).join(', ')}`)
+      }
+      // Subscribe for late-registering wallets
+      const unsubscribe=walletsApi.on('register',()=>{
+        const fresh=walletsApi.get()
+        const suiFresh=fresh.filter(filterSui)
+        console.log(`[SUI Auto] Wallet registered: ${suiFresh.length} SUI wallet(s) now available`)
+        // Don't auto-connect — let user click CONNECT SUI
+      })
+      return()=>unsubscribe()
+    }catch{}
+  },[chain,suiConnected])
 
   // Save ALL game state on every meaningful change
   useEffect(()=>{
@@ -1993,7 +2046,7 @@ function Ransome(){
       announce('🚀 BATCH LAUNCHING — TRANSFERRING TO HACK MATRIX')
       setTimeout(()=>enterGame(),1200)
     }
-    if(lobbyCountdown>5)autoLaunchedRef.current=false  // reset for next cycle
+    if(lobbyCountdown>5&&!DEV_MODE)autoLaunchedRef.current=false  // reset for next cycle (skip in dev mode)
   },[phase,lobbyCountdown,devices.length])
 
 
@@ -2147,10 +2200,131 @@ function Ransome(){
     announce(`⚡ ALL ${devices.length} DEVICES CONNECTED`)
   }
 
-  const mintDevices=()=>{
-    const nd=Array.from({length:mintCount},(_,i)=>({...generateDevice(devices.length+i),walletAddr:wallet||'UNCONNECTED'}))
+  // ─── SUI wallet connect/disconnect ─────────────────────────────────────
+  const connectSui=async()=>{
+    const log=(msg:string)=>{console.log(msg);setWalletDebug(p=>[...p.slice(-15),`${new Date().toLocaleTimeString()} ${msg}`])}
+    try{
+      const walletsApi=getWallets()
+      const allWallets=walletsApi.get()
+      log(`[SUI] getWallets().get() returned ${allWallets.length} wallet(s)`)
+      allWallets.forEach((w:any)=>{
+        log(`[SUI]   "${w.name}" chains=${w.chains?.join(',')} features=${Object.keys(w.features||{}).join(',')}`)
+      })
+
+      const suiWallets=allWallets.filter((w:any)=>
+        isWalletWithRequiredFeatureSet(w,['standard:connect','sui:signAndExecuteTransaction'])
+        ||(w.chains?.some((c:string)=>c.startsWith('sui:'))&&w.features?.['standard:connect'])
+      )
+      log(`[SUI] SUI wallets (after filter): ${suiWallets.length}`)
+
+      if(suiWallets.length===0){
+        announce('⚠ No SUI wallet extension detected — install Slush or Suiet')
+        return
+      }
+
+      const wallet=suiWallets[0]
+      log(`[SUI] Connecting to "${wallet.name}"...`)
+      const connectFeature=wallet.features['standard:connect']
+      if(!connectFeature){
+        log(`[SUI] "${wallet.name}" has no standard:connect feature`)
+        announce('⚠ Wallet has no connect feature')
+        return
+      }
+      const result=await connectFeature.connect()
+      log(`[SUI] connect result: accounts=${result.accounts.length}`)
+      const account=result.accounts[0]
+
+      setSuiAddress(account.address)
+      setSuiConnected(true)
+      setSuiWalletRef(wallet)
+      announce(`✅ SUI CONNECTED — ${account.address.slice(0,10)}…`)
+    }catch(e:any){
+      log(`[SUI] Error: ${e.message}`)
+      announce('⚠ SUI connect failed: '+e.message)
+    }
+  }
+  const disconnectSui=()=>{setSuiAddress(null);setSuiConnected(false);setSuiWalletRef(null);setWalletDebug([]);announce('🔌 SUI DISCONNECTED')}
+
+  // ─── Mint devices (SUI or Solana) ──────────────────────────────────────
+  const mintDevices=async()=>{
+    const count=mintCount
+    const pricePer=DEVICE_PRICE_SUI // 0.5 SUI in MIST
+    const totalCost=pricePer*count
+
+    // DEV MODE — allow up to 20 devices locally without wallet
+    if(DEV_MODE){
+      const nd=Array.from({length:count},(_,i)=>({...generateDevice(devices.length+i),walletAddr:wallet||'DEV_LOCAL'}))
+      setDevices(p=>[...p,...nd])
+      announce(`⚡ ${count} DEVICE${count>1?'S':''} MINTED (DEV) — ${devices.length+count} TOTAL`)
+      return
+    }
+
+    // If SUI chain selected and wallet connected, build real SUI transaction
+    if(chain==='sui'&&suiConnected&&suiAddress&&suiWalletRef){
+      try{
+        // Build transaction — split a fresh coin per mint (each gets its own coin object)
+        const txb=new Transaction()
+        txb.setSender(suiAddress)
+        for(let i=0;i<count;i++){
+          const[paymentCoin]=txb.splitCoins(txb.gas,[BigInt(totalCost)])
+          txb.moveCall({
+            target:`${SUI_PROGRAM_ID}::ransome::mint_device`,
+            arguments:[paymentCoin,txb.object(SESSION_OBJECT_ID),txb.pure.u8(i)],
+          })
+        }
+
+        // Detect which signing feature the wallet supports
+        const hasCurrent=!!suiWalletRef.features['sui:signAndExecuteTransaction']
+        const hasLegacy=!!suiWalletRef.features['sui:signAndExecuteTransactionBlock']
+        console.log(`[SUI] Signing features: current=${hasCurrent} legacy=${hasLegacy}`)
+
+        let result:any
+        if(hasCurrent){
+          result=await suiWalletRef.features['sui:signAndExecuteTransaction'].signAndExecuteTransaction({
+            transaction:txb,
+            account:suiWalletRef.accounts[0],
+            chain:'sui:testnet',
+          })
+        }else if(hasLegacy){
+          result=await suiWalletRef.features['sui:signAndExecuteTransactionBlock'].signAndExecuteTransactionBlock({
+            transactionBlock:txb,
+            account:suiWalletRef.accounts[0],
+            chain:'sui:testnet',
+          })
+        }else{
+          announce('⚠ Wallet does not support signAndExecuteTransaction')
+          return
+        }
+
+        console.log('[SUI] Mint result:',result)
+        const nd=Array.from({length:count},(_,i)=>({...generateDevice(devices.length+i),walletAddr:suiAddress}))
+        setDevices(p=>[...p,...nd])
+        announce(`⚡ ${count} DEVICE${count>1?'S':''} MINTED ON SUI — ${(result?.digest||'tx').slice(0,16)}…`)
+      }catch(e:any){
+        console.error('[SUI] Mint error:',e)
+        announce(`⚠ SUI MINT FAILED: ${e.message}`)
+      }
+      return
+    }
+
+    // Solana chain or fallback — local mint (no on-chain tx for now)
+    if(chain==='solana'&&connected&&publicKey){
+      try{
+        const {PublicKey,Transaction,TransactionInstruction,SystemProgram}=await import('@solana/web3.js')
+        const programId=new PublicKey(PROGRAM_ID_STR)
+        const nd=Array.from({length:count},(_,i)=>({...generateDevice(devices.length+i),walletAddr:publicKey.toBase58()}))
+        setDevices(p=>[...p,...nd])
+        announce(`⚡ ${count} DEVICE${count>1?'S':''} MINTED — BOUND TO ${publicKey.toBase58().slice(0,8)}`)
+      }catch(e:any){
+        announce(`⚠ SOL MINT FAILED: ${e.message}`)
+      }
+      return
+    }
+
+    // No wallet connected — local-only mint
+    const nd=Array.from({length:count},(_,i)=>({...generateDevice(devices.length+i),walletAddr:wallet||'UNCONNECTED'}))
     setDevices(p=>[...p,...nd])
-    announce(`⚡ ${mintCount} DEVICE${mintCount>1?'S':''} MINTED — BOUND TO ${(wallet||'WALLET').slice(0,8)}`)
+    announce(`⚡ ${count} DEVICE${count>1?'S':''} MINTED — BOUND TO ${(wallet||'WALLET').slice(0,8)}`)
   }
 
   const enterGame=()=>{
@@ -2183,14 +2357,41 @@ function Ransome(){
         <div style={{display:'flex',alignItems:'center',gap:20}}>
           <span style={{fontSize:20,fontWeight:800,color:'#00e5a0'}}>RANSOME</span>
           <span style={{fontSize:10,color:'#00e5a0',borderBottom:'2px solid #00e5a0',paddingBottom:2}}>NETWORK: ONLINE</span>
+          {DEV_MODE&&<span style={{fontSize:9,color:'#f59e0b',background:'rgba(245,158,11,0.15)',border:'1px solid rgba(245,158,11,0.4)',borderRadius:4,padding:'2px 6px',marginLeft:8}}>⚠ DEV MODE</span>}
           <span style={{fontSize:10,color:'rgba(0,229,160,0.35)'}}>ENCRYPTION: AES-256</span>
         </div>
         <div style={{display:'flex',gap:10,alignItems:'center'}}>
           <div style={{background:'rgba(24,39,51,0.5)',padding:'4px 10px',border:'1px solid rgba(47,243,173,0.2)',fontSize:12,color:'#00e5a0',fontWeight:700}}>{fmtTime(lobbyCountdown)}</div>
           <div style={{fontSize:10,color:'#4a7fa5',background:'#0a1628',border:'1px solid #1e3a5f',borderRadius:6,padding:'4px 8px'}}>👤 {nickname}</div>
-          {wallet?(<div style={{display:'flex',gap:6}}><div style={{background:'#0a1628',border:'1px solid rgba(0,229,160,0.25)',borderRadius:6,padding:'4px 8px',fontSize:9,color:'#00e5a0'}}>{wallet.slice(0,6)}…{wallet.slice(-4)}</div><button onClick={()=>disconnect()} style={{background:'rgba(239,68,68,0.08)',border:'1px solid rgba(239,68,68,0.25)',borderRadius:6,padding:'4px 8px',fontSize:9,color:'#ef4444',cursor:'pointer'}}>✕</button></div>):(<WalletMultiButton style={{background:'linear-gradient(135deg,#00e5a0,#00b8ff)',color:'#000',borderRadius:6,fontSize:10,fontWeight:700,height:'auto',padding:'6px 12px'}}/>)}
+          {/* Chain selector */}
+          <div style={{display:'flex',borderRadius:6,overflow:'hidden',border:'1px solid #1e3a5f'}}>
+            <button onClick={()=>setChain('solana')} style={{padding:'4px 8px',fontSize:9,fontWeight:700,cursor:'pointer',background:chain==='solana'?'#00e5a020':'transparent',color:chain==='solana'?'#00e5a0':'#4a7fa5',border:'none'}}>SOL</button>
+            <button onClick={()=>setChain('sui')} style={{padding:'4px 8px',fontSize:9,fontWeight:700,cursor:'pointer',background:chain==='sui'?'#4da6ff20':'transparent',color:chain==='sui'?'#4da6ff':'#4a7fa5',border:'none',borderLeft:'1px solid #1e3a5f'}}>SUI</button>
+          </div>
+          {/* Wallet connect based on chain */}
+          {wallet?(<div style={{display:'flex',gap:6}}><div style={{background:'#0a1628',border:`1px solid ${chain==='sui'?'#4da6ff40':'rgba(0,229,160,0.25)'}`,borderRadius:6,padding:'4px 8px',fontSize:9,color:chain==='sui'?'#4da6ff':'#00e5a0'}}>{wallet.slice(0,6)}…{wallet.slice(-4)}</div><button onClick={()=>chain==='sui'?disconnectSui():disconnect()} style={{background:'rgba(239,68,68,0.08)',border:'1px solid rgba(239,68,68,0.25)',borderRadius:6,padding:'4px 8px',fontSize:9,color:'#ef4444',cursor:'pointer'}}>✕</button></div>):(
+            chain==='sui'?(
+              <div style={{display:'flex',gap:4}}>
+                <button onClick={connectSui} style={{background:'linear-gradient(135deg,#4da6ff,#2563eb)',color:'#000',borderRadius:6,fontSize:10,fontWeight:700,height:'auto',padding:'6px 12px',cursor:'pointer',border:'none'}}>CONNECT SUI</button>
+                <button onClick={()=>setWalletDebug(p=>p.length>0?[]:['Click CONNECT SUI first, then check console (F12)'])} style={{background:'#0a1628',border:'1px solid #4da6ff40',borderRadius:6,padding:'4px 8px',fontSize:9,color:'#4da6ff',cursor:'pointer',position:'relative'}} title="Wallet debug">?
+                  {walletDebug.length>0&&<div style={{position:'absolute',top:-4,right:-4,width:8,height:8,borderRadius:'50%',background:'#4da6ff',fontSize:6,color:'#000',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700}}>{walletDebug.length}</div>}
+                </button>
+              </div>
+            ):(
+              <WalletMultiButton style={{background:'linear-gradient(135deg,#00e5a0,#00b8ff)',color:'#000',borderRadius:6,fontSize:10,fontWeight:700,height:'auto',padding:'6px 12px'}}/>
+            )
+          )}
         </div>
       </div>
+      {/* Wallet debug panel */}
+      {walletDebug.length>0&&chain==='sui'&&!wallet&&(
+        <div style={{margin:'0 24px',padding:'8px 12px',background:'#0a0f1a',border:'1px solid #4da6ff30',borderRadius:8,maxHeight:120,overflowY:'auto'}}>
+          <div style={{fontFamily:'DM Mono,monospace',fontSize:7,color:'#4da6ff',fontWeight:700,marginBottom:4}}>🔍 WALLET DETECTION LOG</div>
+          {walletDebug.map((line,i)=>(
+            <div key={i} style={{fontFamily:'DM Mono,monospace',fontSize:6.5,color:line.includes('error')||line.includes('Error')?'#ef4444':line.includes('CONNECTED')?'#22c55e':'#4a7fa5',lineHeight:1.6,whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{line}</div>
+          ))}
+        </div>
+      )}
       <div style={{display:'flex',paddingTop:56}}>
         <div style={{width:200,minHeight:'calc(100vh - 56px)',background:'#09141e',borderRight:'1px solid rgba(0,229,160,0.08)',display:'flex',flexDirection:'column',padding:'16px 0',flexShrink:0}}>
           <div style={{padding:'0 16px 16px',display:'flex',gap:8,alignItems:'center'}}>
@@ -2203,7 +2404,7 @@ function Ransome(){
             return(<div key={item} onClick={()=>setNavTab(tab)} style={{padding:'10px 16px',cursor:'pointer',color:active?'#00e5a0':'#4a6a7a',fontWeight:active?700:400,fontSize:11,borderRight:active?'2px solid #00e5a0':'none',background:active?'rgba(0,229,160,0.06)':'transparent',transition:'all 0.15s'}}>{['🎯 ','📋 ','🌐 '][i]}{item}</div>)
           })}
           <div style={{marginTop:'auto',padding:'0 12px 16px'}}>
-            {lobbyCountdown<=60&&devices.length>0?(<button onClick={enterGame} style={{width:'100%',padding:'8px 0',background:'linear-gradient(135deg,#ef4444,#dc2626)',color:'#fff',border:'none',fontSize:10,fontWeight:700,cursor:'pointer',animation:'ledBlink 0.6s infinite'}}>ENTER MATRIX</button>):(<div style={{padding:'8px',background:'rgba(0,229,160,0.06)',border:'1px solid rgba(0,229,160,0.2)',color:'#00e5a0',fontSize:9,textAlign:'center'}}>INITIALIZE_HEIST</div>)}
+            {(DEV_MODE||lobbyCountdown<=60)&&devices.length>0?(<button onClick={enterGame} style={{width:'100%',padding:'8px 0',background:'linear-gradient(135deg,#ef4444,#dc2626)',color:'#fff',border:'none',fontSize:10,fontWeight:700,cursor:'pointer',animation:DEV_MODE?'none':'ledBlink 0.6s infinite'}}>ENTER MATRIX</button>):DEV_MODE?(<button onClick={enterGame} style={{width:'100%',padding:'8px 0',background:'linear-gradient(135deg,#ef4444,#dc2626)',color:'#fff',border:'none',fontSize:10,fontWeight:700,cursor:'pointer'}}>ENTER MATRIX (DEV)</button>):(<div style={{padding:'8px',background:'rgba(0,229,160,0.06)',border:'1px solid rgba(0,229,160,0.2)',color:'#00e5a0',fontSize:9,textAlign:'center'}}>INITIALIZE_HEIST</div>)}
           </div>
         </div>
         {navTab==='operative'&&<div style={{flex:1,padding:20,display:'grid',gridTemplateColumns:'1fr 300px',gap:16,alignItems:'start'}}>
@@ -2221,11 +2422,20 @@ function Ransome(){
               {selectedBank!==null&&(<div style={{padding:'8px 12px',display:'flex',justifyContent:'space-between',borderTop:'1px solid #0a2535'}}><div style={{fontSize:10,color:'#00e5a0',fontWeight:700}}>{BANKS[selectedBank].name}</div><div style={{fontSize:9,color:selectedBank===liveBank?'#22c55e':'#1e4a6a'}}>{selectedBank===liveBank?'🟢 LIVE':'SCHEDULED'}</div></div>)}
             </div>
             <div style={{background:'#0e1b25',border:'1px solid rgba(63,73,83,0.2)',padding:16}}>
-              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:14}}><span style={{fontSize:14,fontWeight:700,color:'#dce6f3'}}>💻 MINT_TERMINAL</span><span style={{fontSize:9,color:'#4a6a7a'}}>READY</span></div>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:14}}>
+                <span style={{fontSize:14,fontWeight:700,color:'#dce6f3'}}>💻 MINT_TERMINAL</span>
+                <span style={{fontSize:9,color:chain==='sui'?'#4da6ff':'#00e5a0',fontWeight:700}}>{chain.toUpperCase()} · {mintCount}× 0.5 {chain==='sui'?'SUI':'SOL'} = {(mintCount*0.5).toFixed(1)} {chain==='sui'?'SUI':'SOL'}</span>
+              </div>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:12,alignItems:'end'}}>
-                <div><div style={{fontSize:9,color:'#4a6a7a',marginBottom:4}}>QTY</div><div style={{display:'flex',gap:3}}>{[1,3,5,10].map(n=>(<button key={n} onClick={()=>setMintCount(n)} style={{flex:1,padding:'7px 0',background:mintCount===n?'rgba(0,229,160,0.15)':'rgba(0,0,0,0.3)',border:'1px solid '+(mintCount===n?'rgba(0,229,160,0.5)':'rgba(63,73,83,0.3)'),color:mintCount===n?'#00e5a0':'#4a6a7a',fontSize:10,fontWeight:700,cursor:'pointer'}}>{n}</button>))}</div></div>
-                <div><div style={{fontSize:9,color:'#4a6a7a',marginBottom:4}}>TOKEN</div><div style={{display:'flex',gap:3}}>{['SOL','USDT','RNSM'].map(t=>(<button key={t} onClick={()=>setMintToken(t)} style={{flex:1,padding:'7px 3px',background:mintToken===t?'rgba(0,229,160,0.15)':'rgba(0,0,0,0.3)',border:'1px solid '+(mintToken===t?'rgba(0,229,160,0.5)':'rgba(63,73,83,0.3)'),color:mintToken===t?'#00e5a0':'#4a6a7a',fontSize:9,fontWeight:700,cursor:'pointer'}}>{t}</button>))}</div></div>
-                <div>{wallet?(<button onClick={mintDevices} style={{width:'100%',padding:'9px 0',background:'linear-gradient(135deg,#00e5a0,#00b8ff)',color:'#000',border:'none',fontSize:11,fontWeight:700,cursor:'pointer'}}>MINT →</button>):(<WalletMultiButton style={{width:'100%',background:'linear-gradient(135deg,#00e5a0,#00b8ff)',color:'#000',borderRadius:0,fontSize:10,fontWeight:700,height:'auto',padding:'9px 0'}}/>)}</div>
+                <div><div style={{fontSize:9,color:'#4a6a7a',marginBottom:4}}>QTY{DEV_MODE&&<span style={{color:'#f59e0b',marginLeft:4}}>DEV</span>}</div><div style={{display:'flex',gap:3}}>{(DEV_MODE?[1,3,5,10,20]:[1,3,5,10]).map(n=>(<button key={n} onClick={()=>setMintCount(n)} style={{flex:1,padding:'7px 0',background:mintCount===n?(chain==='sui'?'rgba(77,166,255,0.15)':'rgba(0,229,160,0.15)'):'rgba(0,0,0,0.3)',border:'1px solid '+(mintCount===n?(chain==='sui'?'rgba(77,166,255,0.5)':'rgba(0,229,160,0.5)'):'rgba(63,73,83,0.3)'),color:mintCount===n?(chain==='sui'?'#4da6ff':'#00e5a0'):'#4a6a7a',fontSize:10,fontWeight:700,cursor:'pointer'}}>{n}</button>))}</div></div>
+                <div><div style={{fontSize:9,color:'#4a6a7a',marginBottom:4}}>TOKEN</div><div style={{display:'flex',gap:3}}>{(chain==='sui'?['SUI']:['SOL','USDT','RNSM']).map(t=>(<button key={t} onClick={()=>setMintToken(t)} style={{flex:1,padding:'7px 3px',background:mintToken===t?'rgba(0,229,160,0.15)':'rgba(0,0,0,0.3)',border:'1px solid '+(mintToken===t?'rgba(0,229,160,0.5)':'rgba(63,73,83,0.3)'),color:mintToken===t?'#00e5a0':'#4a6a7a',fontSize:9,fontWeight:700,cursor:'pointer'}}>{t}</button>))}</div></div>
+                <div>{wallet?(<button onClick={mintDevices} style={{width:'100%',padding:'9px 0',background:chain==='sui'?'linear-gradient(135deg,#4da6ff,#2563eb)':'linear-gradient(135deg,#00e5a0,#00b8ff)',color:'#000',border:'none',fontSize:11,fontWeight:700,cursor:'pointer'}}>MINT →</button>):(
+                  chain==='sui'?(
+                    <button onClick={connectSui} style={{width:'100%',padding:'9px 0',background:'linear-gradient(135deg,#4da6ff,#2563eb)',color:'#000',border:'none',fontSize:10,fontWeight:700,cursor:'pointer'}}>CONNECT SUI →</button>
+                  ):(
+                    <WalletMultiButton style={{width:'100%',background:'linear-gradient(135deg,#00e5a0,#00b8ff)',color:'#000',borderRadius:0,fontSize:10,fontWeight:700,height:'auto',padding:'9px 0'}}/>
+                  )
+                )}</div>
               </div>
             </div>
             <div><div style={{fontSize:8,color:'#1e4a6a',marginBottom:6}}>💬 LOBBY CHAT</div><ChatTerminal nickname={nickname}/></div>
@@ -2246,13 +2456,13 @@ function Ransome(){
               <div style={{fontSize:26,fontWeight:800,color:lobbyCountdown<=60?'#ef4444':'#fff'}}>{fmtTime(lobbyCountdown)}</div>
             </div>
             <div style={{textAlign:'center',fontSize:8,color:'#1e4a6a'}}>{devices.length>0?(<span style={{color:'#00e5a0'}}>⚡ {devices.length} DEVICE{devices.length>1?'S':''} READY</span>):(<span>MINT TO JOIN</span>)}</div>
-            {lobbyCountdown<=60&&devices.length>0&&(<button onClick={enterGame} style={{width:'100%',padding:'9px 0',background:'linear-gradient(135deg,#ef4444,#dc2626)',color:'#fff',border:'none',fontSize:10,fontWeight:700,cursor:'pointer',animation:'ledBlink 0.6s infinite'}}>🚀 ENTER HACK MATRIX</button>)}
+            {(DEV_MODE||lobbyCountdown<=60)&&devices.length>0&&(<button onClick={enterGame} style={{width:'100%',padding:'9px 0',background:'linear-gradient(135deg,#ef4444,#dc2626)',color:'#fff',border:'none',fontSize:10,fontWeight:700,cursor:'pointer',animation:DEV_MODE?'none':'ledBlink 0.6s infinite'}}>🚀 ENTER HACK MATRIX</button>)}
+            {DEV_MODE&&!devices.length&&(<button onClick={enterGame} style={{width:'100%',padding:'9px 0',background:'linear-gradient(135deg,#ef4444,#dc2626)',color:'#fff',border:'none',fontSize:10,fontWeight:700,cursor:'pointer'}}>🚀 ENTER HACK MATRIX (DEV)</button>)}
             {lobbyCountdown>60&&devices.length>0&&(<div style={{textAlign:'center',fontSize:8,color:'#1e4a6a'}}>Entry in {fmtTime(lobbyCountdown-60)}</div>)}
           </div>
         </div>}
         {navTab==='missions'&&<MissionsDemo/>}
-        {navTab==='network'&&<NetworkHub nickname={nickname} wallet={wallet}/>}          </div>
-        </div>
+        {navTab==='network'&&<NetworkHub nickname={nickname} wallet={wallet}/>}
       </div>
       <div style={{position:'fixed',bottom:0,left:0,width:'100%',zIndex:50,height:28,display:'flex',justifyContent:'space-between',alignItems:'center',padding:'0 16px',background:'#000',borderTop:'1px solid rgba(0,229,160,0.15)',boxSizing:'border-box'}}>
         <span style={{fontSize:9,color:'rgba(0,229,160,0.6)'}}>SYSTEM_BREACH_LOGS v2.4.0 · ACCESSING_NODE_01...</span>
@@ -2317,7 +2527,7 @@ function Ransome(){
     <div style={{background:'linear-gradient(180deg,#010810,#020d1a)',color:'#c8d8e8',minHeight:'100vh'}}>
       {/* Header */}
       <div style={{padding:'7px 12px',borderBottom:'1px solid #0a1f3a',display:'flex',alignItems:'center',background:'rgba(2,13,26,0.96)',backdropFilter:'blur(12px)',WebkitBackdropFilter:'blur(12px)',position:'sticky',top:0,zIndex:50}}>
-        <div style={{fontFamily:'Syne,sans-serif',fontSize:17,fontWeight:800,color:'#00e5a0',flexShrink:0}}>RANSOME</div>
+        <div style={{fontFamily:'Syne,sans-serif',fontSize:17,fontWeight:800,color:'#00e5a0',flexShrink:0}}>RANSOME{DEV_MODE&&<span style={{fontSize:9,color:'#f59e0b',marginLeft:6,verticalAlign:'middle'}}>DEV</span>}</div>
         <div style={{flex:1,margin:'0 10px',height:26,background:'rgba(0,229,160,0.02)',border:'1px dashed #0a2535',borderRadius:5,display:'flex',alignItems:'center',justifyContent:'center'}}>
           <span style={{fontFamily:'DM Mono,monospace',fontSize:7,color:'#0a2535'}}>AD</span>
         </div>
